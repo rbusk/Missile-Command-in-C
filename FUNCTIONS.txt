@@ -1,0 +1,9 @@
+Functions to ADD
+
+	draw cities
+	draw missile bases
+	blow up missile
+	check if bomb is in radius
+	shoot missile
+	drop bomb
+	
