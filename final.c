@@ -128,4 +128,22 @@ int checkNumberOfCities(City cityArray[6])
 
 	return totalAlive;
 }
+//returns number of alive bombs
+int checkNumberOfBombs(Bomb bombArray[30])
+{
+	int i, nBombs; //counter, number of bombs
+
+	for (i=0; i<30; i++)
+	{
+		if (bombArray[i].status==alive)
+		{
+			nBombs++;
+		}
+	}
+
+	return nBombs;
+}
+
+
+
 
