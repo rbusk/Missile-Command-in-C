@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <math.h>
+#include <time.h>
 #include "gfx3.h"
 
 struct Bomb
@@ -8,7 +9,7 @@ struct Bomb
 	int ystart;
 	int deltax;
 	int deltay;
-	int end; //1 through 9
+	int end; //0 through 8
 	int status;
 	int timeTilLaunch;
 } typedef Bomb;
@@ -66,7 +67,7 @@ int lose(Bomb bombArray[30], Missile missileArray[30], City cityArray[6]); //don
 int speed(int currentLevel); //done
 int numberOfBombs(int currentLevel); //done
 void initializeBomb(Bomb bombArray[30], City cityArray[6], Base baseArray[3],int currentLevel);
-void randomizeBomb(Bomb bombArray[30];
+void randomizeBomb(Bomb bombArray[30]);
 void initializeStructures(City cityArray[6], Base baseArray[3]); //done
 void initializeMissiles(Missile missileArray[30], Base baseArray[3]);
 void drawCities(City cityArray[6]);
@@ -78,6 +79,10 @@ int checkIfBombInsideExplosion(Bomb bombArray[30],Explosion explosionArray[30]);
 
 int main()
 {
+	time_t t;
+
+	srand(time(&t));
+
 	Base baseArray[3];
 	City cityArray[6];
 	Missile missileArray[30];
@@ -101,6 +106,21 @@ int main()
 	}
 
 
+}
+
+//randomizes the time each bomb is detonated and the destination of each bomb
+void randomizeBomb(Bomb bombArray[30])
+{
+	int i;
+
+	for (i=0; i<30; i++)
+	{
+		if (bombArray[i].status==alive)
+		{
+			bombArray[i].end= rand() % 9; //generate a number 0 through 8
+			bombArray[i].timeTilLaunch % 200; // generate a number 0 through 199
+		}
+	}
 }
 
 //initializes cityArray and baseArray
