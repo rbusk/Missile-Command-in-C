@@ -56,8 +56,8 @@ struct Explosion
 {
 	int x;
 	int y;
-	int radius;
-	int deltaR;
+	double radius;
+	double deltaR;
 } typedef Explosion;
 
 enum STATUS
@@ -83,7 +83,11 @@ void drawCities(City cityArray[6]); //done
 void drawBases(Base baseArray[3], Missile missileArray[30]);//done
 void drawMissiles(Missile missileArray[30]);//done
 void drawBombs(Bomb bombArray[30]);//done
-int checkIfBombInsideExplosion(Bomb bombArray[30],Explosion explosionArray[30]);
+void checkIfBombInsideExplosion(Bomb bombArray[30],Explosion explosionArray[30]);
+void initializeExplosion(Explosion explosionArray[30], Missile missileArray[30]);
+void drawExplosion(Explosion explosionArray[30]);
+void checkIfBombIsInCity(Bomb bombArray[30], City cityArray[6]);
+void checkIfBombIsInBase(Bomb bombArray[30], Base baseArray[3]);
 
 
 int main()
@@ -110,11 +114,14 @@ int main()
 		
 		initializeStructures(cityArray,baseArray); //done
 		initializeMissiles(missileArray, baseArray);
+		initializeBomb(bombArray,cityArray, baseArray, currentLevel);
 
 		while (!win(bombArray, missileArray, cityArray) && !lose(bombArray, missileArray, cityArray))
 		{
 			drawBases(baseArray,missileArray);
 			drawCities(cityArray);
+			drawBombs(bombArray);
+			drawMissiles(missileArray);
 
 		}
 
@@ -141,7 +148,7 @@ void initializeBomb(Bomb bombArray[30], City cityArray[6], Base baseArray[3],int
 	{
 		bombArray[i].ystart=0; //sets ystart
 
-		bombArray[i].status=0; //sets status
+		bombArray[i].status=dead; //sets status
 
 		bombArray[i].x=bombArray[i].xstart;
 
