@@ -62,6 +62,8 @@ int checkNumberOfMissiles(Missile missileArray[30]);
 int checkNumberOfCities(City cityArray[6]);
 int win(Bomb bombArray[30],Missile missileArray[30], City cityArray[6]);
 int lose(Bomb bombArray[30], Missile missileArray[30], City cityArray[6]);
+int speed(int currentLevel);
+int numberOfBombs(int currentLevel);
 void initializeBomb(Bomb bombArray[30], City cityArray[6], Base baseArray[3],int currentLevel);
 void initializeStructures(City cityArray[6], Base baseArray[3]);
 void initializeMissiles(Missile missileArray[30], Base baseArray[3]);
@@ -97,6 +99,27 @@ int main()
 	}
 
 
+}
+
+int numberOfBombs(int currentLevel)
+{
+	int i, nBombs=10;
+
+	for (i=1; i<currentLevel; i++)
+	{
+		nBombs+=2;
+	}
+
+	return nBombs;
+}
+
+int speed(int currentLevel)
+{
+	int speed;
+
+	speed=currentLevel*2;
+
+	return speed;
 }
 
 int lose(Bomb bombArray[30], Missile missileArray[30], City cityArray[6])
