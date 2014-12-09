@@ -8,8 +8,9 @@ struct Bomb
 	int ystart;
 	int deltax;
 	int deltay;
-	int end;
+	int end; //1 through 9
 	int status;
+	int timeTilLaunch;
 } typedef Bomb;
 
 struct Missile
@@ -64,8 +65,16 @@ int win(Bomb bombArray[30],Missile missileArray[30], City cityArray[6]);
 int lose(Bomb bombArray[30], Missile missileArray[30], City cityArray[6]);
 int speed(int currentLevel);
 int numberOfBombs(int currentLevel);
+int checkNumberOfBombs(Bomb bombArray[30]); //done
+int checkNumberOfMissiles(Missile missileArray[30]); //done
+int checkNumberOfCities(City cityArray[6]); //done
+int win(Bomb bombArray[30],Missile missileArray[30], City cityArray[6]); //done
+int lose(Bomb bombArray[30], Missile missileArray[30], City cityArray[6]); //done
+int speed(int currentLevel); //done
+int numberOfBombs(int currentLevel); //done
 void initializeBomb(Bomb bombArray[30], City cityArray[6], Base baseArray[3],int currentLevel);
-void initializeStructures(City cityArray[6], Base baseArray[3]);
+void randomizeBomb(Bomb bombArray[30]);
+void initializeStructures(City cityArray[6], Base baseArray[3]); //done
 void initializeMissiles(Missile missileArray[30], Base baseArray[3]);
 void drawCities(City cityArray[6]);
 void drawBases(Base baseArray[3]);
@@ -99,6 +108,47 @@ int main()
 	}
 
 
+}
+
+//initializes cityArray and baseArray
+void initializeStructures(City cityArray[6], Base baseArray[3])
+{
+	int i, y=650;
+
+	for (i=0; i<9;i++)
+	{
+		if (i==0)
+		{
+			baseArray[0].xleft=35+85*i;
+			baseArray[0].yleft=y;
+		}
+
+		if (i==4)
+		{
+			baseArray[1].xleft=35+85*i;
+			baseArray[1].yleft=y;
+		}
+
+		if (i==8)
+		{
+			baseArray[2].xleft=35+85*i;
+			baseArray[2].yleft=y;
+		}
+
+		if ((i>=1) && (i<=3))
+		{
+			cityArray[i-1].xleft=35+85*i;
+			cityArray[i-1].yleft=35+85*i;
+		}
+
+		if ((i>=5) && (i<=7))
+		{
+			cityArray[i-2].xleft=35+85*i;
+			cityArray[i-2].yleft=y;
+		}
+
+
+	}
 }
 
 int numberOfBombs(int currentLevel)
