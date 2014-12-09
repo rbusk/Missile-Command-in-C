@@ -21,7 +21,6 @@ struct Missile
 	int deltax;
 	int deltay;
 	int status;
-	int explosionRadius;
 	int baseNumber;
 } typedef Missile;
 
@@ -98,5 +97,35 @@ int main()
 	}
 
 
+}
+
+int checkNumberOfMissiles(Missile missileArray[30])
+{
+	int max = 30, i, totalAlive;
+
+	for (i = 0; i < max; i++)
+	{
+		if (missileArray[i].status == alive)
+		{
+			totalAlive++;
+		}
+	}
+
+	return totalAlive;
+}
+
+int checkNumberOfCities(City cityArray[6])
+{
+	int max = 6, i, totalAlive;
+
+	for (i = 0; i < max; i++)
+	{
+		if (cityArray[i].status == alive)
+		{
+			totalAlive++;
+		}
+	}
+
+	return totalAlive;
 }
 
