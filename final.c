@@ -126,9 +126,15 @@ int win(Bomb bombArray[30], Missile missileArray[30], City cityArray[6])
 
 	nCities=checkNumberOfCities(cityArray[6]);
 
-	if ((nBombs==0) && (nCities>0)) return 1;
+	if ((nBombs==0) && (nCities>0)) 
+	{
+		return 1;
+	}
 
-	else return 0;
+	else 
+	{
+		return 0;
+	}
 }
 
 int checkNumberOfMissiles(Missile missileArray[30])
