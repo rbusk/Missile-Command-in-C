@@ -107,7 +107,7 @@ int checkNumberOfBombs(Bomb bombArray[30])
 
 	for (i=0; i<30; i++)
 	{
-		if bombArray[i].status==alive
+		if (bombArray[i].status==alive)
 		{
 			nBombs++;
 		}
