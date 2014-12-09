@@ -62,7 +62,6 @@ int checkNumberOfMissiles(Missile missileArray[30]);
 int checkNumberOfCities(City cityArray[6]);
 int win(Bomb bombArray[30],Missile missileArray[30], City cityArray[6]);
 int lose(Bomb bombArray[30], Missile missileArray[30], City cityArray[6]);
-void initializeBomb(Bomb bombArray[30], City cityArray[6], Base baseArray[3], int currentLevel);
 int speed(int currentLevel);
 int numberOfBombs(int currentLevel);
 void initializeBomb(Bomb bombArray[30], City cityArray[6], Base baseArray[3],int currentLevel);
@@ -146,9 +145,9 @@ int win(Bomb bombArray[30], Missile missileArray[30], City cityArray[6])
 {
 	int nBombs, nCities; //number of bombs, number of cities
 
-	nBombs=checkNumberOfBombs(bombArray[30]);
+	nBombs=checkNumberOfBombs(bombArray);
 
-	nCities=checkNumberOfCities(cityArray[6]);
+	nCities=checkNumberOfCities(cityArray);
 
 	if ((nBombs==0) && (nCities>0)) 
 	{
@@ -206,6 +205,29 @@ int checkNumberOfBombs(Bomb bombArray[30])
 	return nBombs;
 }
 
+void drawCities(City cityArray[6])
+{
+	int i, x, y;
+	for (i = 0; i < 6; i++)
+	{
+		x = cityArray[i].xleft;
+		y = cityArray[i].yleft;
 
+		gfx_rectangle(x,y,50,50);
+	}
+}
+
+
+void drawBases(Base baseArray[3])
+{
+	int i, x, y;
+	for (i = 0; i < 6; i++)
+	{
+		x = baseArray[i].xleft;
+		y = baseArray[i].yleft;
+
+		gfx_rectangle(x,y,50,50);
+	}
+}
 
 
