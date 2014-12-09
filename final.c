@@ -127,6 +127,25 @@ int main()
 
 }
 
+//initializes variables for bombs
+void initializeBomb(Bomb bombArray[30], City cityArray[6], Base baseArray[3],int currentLevel)
+{
+	int nBombs, i; //number of bombs
+
+	nBombs=numberOfBombs(currentLevel);
+
+	for (i=0; i<nBombs; i++)
+	{
+		bombArray[i].ystart=0; //sets ystart
+
+		bombArray[i].status=0; //sets status
+
+		randomizeBomb(bombArray); //sets end, timeTilLaunch, and xstart
+
+		bombDestination(cityArray, baseArray, bombArray); //sets xend and yend
+	}
+}
+
 //randomizes the time each bomb is detonated and the destination of each bomb
 void randomizeBomb(Bomb bombArray[30])
 {
