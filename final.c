@@ -8,11 +8,13 @@ struct Bomb
 {
 	int xstart;
 	int ystart;
-	int deltax;
-	int deltay;
+	double deltax;
+	double deltay;
 	int end; //0 through 8
 	int xend;
 	int yend;
+	double x;
+	double y;
 	int status;
 	int timeTilLaunch;
 } typedef Bomb;
@@ -68,11 +70,11 @@ int checkNumberOfMissiles(Missile missileArray[30]); //done
 int checkNumberOfCities(City cityArray[6]); //done
 int win(Bomb bombArray[30],Missile missileArray[30], City cityArray[6]); //done
 int lose(Bomb bombArray[30], Missile missileArray[30], City cityArray[6]); //done
-int speed(int currentLevel); //done
 int numberOfBombs(int currentLevel); //done
-void initializeBomb(Bomb bombArray[30], City cityArray[6], Base baseArray[3],int currentLevel);
+void initializeBomb(Bomb bombArray[30], City cityArray[6], Base baseArray[3],int currentLevel); //done
 void randomizeBomb(Bomb bombArray[30]); //done
 void bombDestination(City cityArray[6], Base baseArray[3], Bomb bombArray[30]); //done
+void bombSpeed(Bomb bombArray[30], int currentLevel); //done
 void initializeStructures(City cityArray[6], Base baseArray[3]); //done
 void initializeMissiles(Missile missileArray[30], Base baseArray[3]);
 void drawCities(City cityArray[6]);
@@ -130,15 +132,43 @@ void initializeBomb(Bomb bombArray[30], City cityArray[6], Base baseArray[3],int
 
 	nBombs=numberOfBombs(currentLevel);
 
+	randomizeBomb(bombArray);
+
 	for (i=0; i<nBombs; i++)
 	{
 		bombArray[i].ystart=0; //sets ystart
 
 		bombArray[i].status=0; //sets status
 
-		randomizeBomb(bombArray); //sets end, timeTilLaunch, and xstart
+		bombArray[i].x=bombArray[i].xstart;
 
-		bombDestination(cityArray, baseArray, bombArray); //sets xend and yend
+		bombArray[i].y=bombArray[i].ystart;
+	}
+
+	bombDestination(cityArray, baseArray, bombArray);
+
+	bombSpeed(bombArray, currentLevel);
+}
+
+void bombSpeed(Bomb bombArray[30], int currentLevel)
+{
+	int i;
+
+	double x, y, theta;
+
+	double speed=currentLevel*.2;
+
+	for(i=0; i<30; i++)
+	{
+		x=bombArray[i].xend-bombArray[i].xstart;
+
+		y=bombArray[i].yend-bombArray[i].ystart;
+
+		theta=atan(y/x);
+
+		bombArray[i].deltax=cos(theta)*speed;
+
+		bombArray[i].deltay=cos(theta)*speed;
 	}
 }
 
@@ -243,39 +273,6 @@ int numberOfBombs(int currentLevel)
 	}
 
 	return nBombs;
-}
-
-//returns number of iterations through which the while loop must loop before the length of the bomb's line increases
-int speed(int currentLevel)
-{
-	int speed;
-
-	if (currentLevel==1)
-	{
-		speed=5;
-	}
-
-	else if (currentLevel==2)
-	{
-		speed=4;
-	}
-
-	else if (currentLevel==3)
-	{
-		speed=3;
-	}
-
-	else if (currentLevel==4)
-	{
-		speed=2;
-	}
-
-	else if (currentLevel==5)
-	{
-		speed=1;
-	}
-
-	return speed;
 }
 
 int lose(Bomb bombArray[30], Missile missileArray[30], City cityArray[6])
