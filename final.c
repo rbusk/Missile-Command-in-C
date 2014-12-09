@@ -58,6 +58,7 @@ struct Explosion
 	int y;
 	double radius;
 	double deltaR;
+	int status;
 } typedef Explosion;
 
 enum STATUS
@@ -83,7 +84,7 @@ void drawCities(City cityArray[6]); //done
 void drawBases(Base baseArray[3], Missile missileArray[30]);//done
 void drawMissiles(Missile missileArray[30]);//done
 void drawBombs(Bomb bombArray[30]);//done
-void checkIfBombInsideExplosion(Bomb bombArray[30],Explosion explosionArray[30]);
+void checkIfBombInsideExplosion(Bomb bombArray[30],Explosion explosionArray[30], int nBombs); //done
 void initializeExplosion(Explosion explosionArray[30], Missile missileArray[30]);
 void drawExplosion(Explosion explosionArray[30]);
 void checkIfBombIsInCity(Bomb bombArray[30], City cityArray[6], int nBombs); //done
@@ -133,6 +134,29 @@ int main()
 	}
 
 
+}
+
+//checks if Bomb is inside an explosion and, if so, changes its status to dead
+void checkIfBombInsideExplosion(Bomb bombArray[30],Explosion explosionArray[30], int nBombs) 
+{
+	int i, j, x, y; //x and y are the coordinates of the bomb
+
+	for(i=0; i<nBombs; i++)
+	{
+		x=bombArray[i].x;
+		y=bombArray[i].y;
+
+		for (j=0; j<30; j++)
+		{
+			if((bombArray[i].status==alive) && (explosionArray[j].status==alive))
+			{
+				if (explosionArray[j].radius>sqrt(x*x+y*y))
+				{
+					bombArray[i].status=dead;
+				}
+			}
+		}
+	}
 }
 
 //removes missiles from a base that has been destroyed
