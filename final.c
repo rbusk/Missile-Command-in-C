@@ -62,12 +62,6 @@ enum STATUS
 	alive
 };
 
-int checkNumberOfBombs(Bomb bombArray[30]);
-int checkNumberOfMissiles(Missile missileArray[30]);
-int checkNumberOfCities(City cityArray[6]);
-int win(Bomb bombArray[30],Missile missileArray[30], City cityArray[6]);
-int lose(Bomb bombArray[30], Missile missileArray[30], City cityArray[6]);
-int speed(int currentLevel);
 int numberOfBombs(int currentLevel);
 int checkNumberOfBombs(Bomb bombArray[30]); //done
 int checkNumberOfMissiles(Missile missileArray[30]); //done
@@ -82,7 +76,7 @@ void bombDestination(City cityArray[6], Base baseArray[3], Bomb bombArray[30]); 
 void initializeStructures(City cityArray[6], Base baseArray[3]); //done
 void initializeMissiles(Missile missileArray[30], Base baseArray[3]);
 void drawCities(City cityArray[6]);
-void drawBases(Base baseArray[3]);
+void drawBases(Base baseArray[3], Missile missileArray[30]);
 void drawMissiles(Missile missileArray[30]);
 void drawBombs(Bomb bombArray[30]);
 int checkIfBombInsideExplosion(Bomb bombArray[30],Explosion explosionArray[30]);
@@ -102,11 +96,13 @@ int main()
 
 	
 	int currentLevel,maxLevel = 5;
-	int width = 700;
+	int width = 800;
 	int height = 700;
 
 	gfx_open(width,height,"MISSILE COMMAND");
-	drawBases(baseArray);
+	initializeStructures(cityArray,baseArray); //done
+	initializeMissiles(missileArray, baseArray);
+	drawBases(baseArray,missileArray);
 	drawCities(cityArray);
 	gfx_wait();
 	
@@ -167,36 +163,41 @@ void initializeStructures(City cityArray[6], Base baseArray[3])
 {
 	int i, y=650;
 
-	for (i=0; i<9;i++)
+	for (i=0; i<=8;i++)
 	{
 		if (i==0)
 		{
 			baseArray[0].xleft=35+85*i;
 			baseArray[0].yleft=y;
+			baseArray[0].status = alive;
 		}
 
 		if (i==4)
 		{
 			baseArray[1].xleft=35+85*i;
 			baseArray[1].yleft=y;
+			baseArray[1].status = alive;
 		}
 
 		if (i==8)
 		{
 			baseArray[2].xleft=35+85*i;
 			baseArray[2].yleft=y;
+			baseArray[2].status = alive;
 		}
 
 		if ((i>=1) && (i<=3))
 		{
 			cityArray[i-1].xleft=35+85*i;
-			cityArray[i-1].yleft=35+85*i;
+			cityArray[i-1].yleft=y;
+			cityArray[i-1].status = alive;
 		}
 
 		if ((i>=5) && (i<=7))
 		{
 			cityArray[i-2].xleft=35+85*i;
 			cityArray[i-2].yleft=y;
+			cityArray[i-2].status = alive;
 		}
 
 
@@ -368,21 +369,70 @@ void drawCities(City cityArray[6])
 		x = cityArray[i].xleft;
 		y = cityArray[i].yleft;
 
-		gfx_rectangle(x,y,50,50);
+		if (cityArray[i].status = alive)
+		{
+			gfx_rectangle(x,y,50,50);
+		}
 	}
 }
 
 
-void drawBases(Base baseArray[3])
+void drawBases(Base baseArray[3], Missile missileArray[30])
 {
-	int i, x, y;
-	for (i = 0; i < 6; i++)
+	int i, j, x, y, totalMissile = 0;
+	char missileTotal[3];
+	for (i = 0; i < 3; i++)
 	{
+		totalMissile = 0;
 		x = baseArray[i].xleft;
 		y = baseArray[i].yleft;
 
+		for (j = 0; j < 30; j++)
+		{
+			if (missileArray[j].baseNumber == i && missileArray[j].status == alive)
+			{
+				totalMissile++;
+			}
+		}
+
+		
 		gfx_rectangle(x,y,50,50);
+		sprintf(missileTotal,"%d",totalMissile);
+		gfx_text(x + 20, y + 20, missileTotal);
+
+
 	}
 }
+
+void initializeMissiles(Missile missileArray[30], Base baseArray[3])
+{
+	int i;
+
+	for (i = 0; i < 30; i++)
+	{
+		if (i < 10)
+		{
+			missileArray[i].xstart = baseArray[0].xleft + 25;
+			missileArray[i].ystart = baseArray[0].yleft + 25;
+			missileArray[i].status = alive;
+			missileArray[i].baseNumber = 0;
+		}
+		if (i >= 10 && i < 20)
+		{
+			missileArray[i].xstart = baseArray[1].xleft + 25;
+			missileArray[i].ystart = baseArray[1].yleft + 25;
+			missileArray[i].status = alive;
+			missileArray[i].baseNumber = 1;
+		}
+		if (i >=20 && i < 30)
+		{
+			missileArray[i].xstart = baseArray[2].xleft + 25;
+			missileArray[i].ystart = baseArray[2].yleft + 25;
+			missileArray[i].status = alive;
+			missileArray[i].baseNumber = 2;
+		}
+	}
+}
+
 
 
