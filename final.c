@@ -23,8 +23,8 @@ struct Missile
 {
 	int xstart;
 	int ystart;
-	int x;
-	int y;
+	double x;
+	double y;
 	int endx;
 	int endy;
 	double deltax;
