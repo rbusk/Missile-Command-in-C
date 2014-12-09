@@ -99,6 +99,20 @@ int main()
 
 }
 
+//returns 1 if win and 0 otherwise
+int win(Bomb bombArray[30], Missile missileArray[30], City cityArray[6])
+{
+	int nBombs, nCities; //number of bombs, number of cities
+
+	nBombs=checkNumberOfBombs(bombArray[30]);
+
+	nCities=checkNumberOfCities(cityArray[6]);
+
+	if ((nBombs==0) && (nCities>0)) return 1;
+
+	else return 0;
+}
+
 int checkNumberOfMissiles(Missile missileArray[30])
 {
 	int max = 30, i, totalAlive;
