@@ -86,9 +86,8 @@ void drawBombs(Bomb bombArray[30]);//done
 void checkIfBombInsideExplosion(Bomb bombArray[30],Explosion explosionArray[30]);
 void initializeExplosion(Explosion explosionArray[30], Missile missileArray[30]);
 void drawExplosion(Explosion explosionArray[30]);
-void checkIfBombIsInCity(Bomb bombArray[30], City cityArray[6]);
-void checkIfBombIsInBase(Bomb bombArray[30], Base baseArray[3]);
-
+void checkIfBombIsInCity(Bomb bombArray[30], City cityArray[6], int nBombs);
+void checkIfBombIsInBase(Bomb bombArray[30], Base baseArray[3], int nBombs);
 
 int main()
 {
@@ -133,6 +132,41 @@ int main()
 	}
 
 
+}
+
+//checks if Bomb has hit a city
+void checkIfBombIsInCity(Bomb bombArray[30], City cityArray[6], int nBombs) 
+{
+	int i, n;
+
+	for (i=0; i<nBombs; i++)
+	{
+		n=bombArray[i].end;
+
+		if (bombArray[i].status==alive)
+		{
+			if ((n>=1) && (n<=3))
+			{
+				if ((bombArray[i].x>bombArray[i].xend) && (bombArray[i].y>bombArray[i].yend))
+				{
+					//make explosion
+					cityArray[n].status=dead;
+					bombArray[i].status=dead;	
+				}
+			}
+
+			if ((n>=5) && (n<=7))
+			{	
+				if ((bombArray[i].x>bombArray[i].xend) && (bombArray[i].y>bombArray[i].yend))
+				{
+					//make explosion
+					cityArray[n].status=dead;
+					bombArray[i].status=dead;
+				}
+			}
+		}
+	}
+				
 }
 
 //initializes variables for bombs
