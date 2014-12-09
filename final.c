@@ -74,7 +74,7 @@ int lose(Bomb bombArray[30], Missile missileArray[30], City cityArray[6]); //don
 int speed(int currentLevel); //done
 int numberOfBombs(int currentLevel); //done
 void initializeBomb(Bomb bombArray[30], City cityArray[6], Base baseArray[3],int currentLevel);
-void randomizeBomb(Bomb bombArray[30]);
+void randomizeBomb(Bomb bombArray[30]); //done
 void initializeStructures(City cityArray[6], Base baseArray[3]); //done
 void initializeMissiles(Missile missileArray[30], Base baseArray[3]);
 void drawCities(City cityArray[6]);
@@ -125,7 +125,8 @@ void randomizeBomb(Bomb bombArray[30])
 		if (bombArray[i].status==alive)
 		{
 			bombArray[i].end= rand() % 9; //generate a number 0 through 8
-			bombArray[i].timeTilLaunch % 200; // generate a number 0 through 199
+			bombArray[i].timeTilLaunch= rand() % 200; // generate a number 0 through 199
+			bombArray[i].xstart = rand() % 700 +1; // generate a number 1 to 700
 		}
 	}
 }
