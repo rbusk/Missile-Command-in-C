@@ -86,8 +86,9 @@ void drawBombs(Bomb bombArray[30]);//done
 void checkIfBombInsideExplosion(Bomb bombArray[30],Explosion explosionArray[30]);
 void initializeExplosion(Explosion explosionArray[30], Missile missileArray[30]);
 void drawExplosion(Explosion explosionArray[30]);
-void checkIfBombIsInCity(Bomb bombArray[30], City cityArray[6], int nBombs);
-void checkIfBombIsInBase(Bomb bombArray[30], Base baseArray[3], int nBombs);
+void checkIfBombIsInCity(Bomb bombArray[30], City cityArray[6], int nBombs); //done
+void checkIfBombIsInBase(Bomb bombArray[30], Base baseArray[3], Missile missileArray[30], int nBombs);
+void removeMissiles(int n, Missile missileArray[30]);
 
 int main()
 {
@@ -133,8 +134,31 @@ int main()
 
 
 }
+//checks if Bomb has hit a base and changes statuses of bomb and base if necessary
+void checkIfBombIsInBase(Bomb bombArray[30], Base baseArray[3], Missile missileArray[30], int nBombs)
+{
+	int i, n;
 
-//checks if Bomb has hit a city
+	for (i=0; i<nBombs; i++)
+	{
+		n=bombArray[i].end;
+
+		if (bombArray[i].status==alive)
+		{
+			if ((n==0) || (n==4) || (n==8))
+			{
+				if ((bombArray[i].x>bombArray[i].xend) && (bombArray[i].y>bombArray[i].yend))
+				{
+					bombArray[i].status=dead;
+					baseArray[n/4].status=dead;
+					//removeMissiles(n/4, missileArray); 
+				}
+			}
+		}
+	}
+}
+
+//checks if Bomb has hit a city and change statuses of bomb and city if necessary
 void checkIfBombIsInCity(Bomb bombArray[30], City cityArray[6], int nBombs) 
 {
 	int i, n;
@@ -150,7 +174,7 @@ void checkIfBombIsInCity(Bomb bombArray[30], City cityArray[6], int nBombs)
 				if ((bombArray[i].x>bombArray[i].xend) && (bombArray[i].y>bombArray[i].yend))
 				{
 					//make explosion
-					cityArray[n].status=dead;
+					cityArray[n-1].status=dead;
 					bombArray[i].status=dead;	
 				}
 			}
@@ -160,7 +184,7 @@ void checkIfBombIsInCity(Bomb bombArray[30], City cityArray[6], int nBombs)
 				if ((bombArray[i].x>bombArray[i].xend) && (bombArray[i].y>bombArray[i].yend))
 				{
 					//make explosion
-					cityArray[n].status=dead;
+					cityArray[n-2].status=dead;
 					bombArray[i].status=dead;
 				}
 			}
