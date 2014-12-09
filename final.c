@@ -99,6 +99,25 @@ int main()
 
 }
 
+int lose(Bomb bombArray[30], Missile missileArray[30], City cityArray[6])
+{
+	int totalBombs, totalCities;
+
+	totalBombs = checkNumberOfBombs(bombArray);
+
+	totalCities = checkNumberOfCities(cityArray);
+
+	if (totalCities == 0 && totalBombs == 0)
+	{
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+
 int checkNumberOfMissiles(Missile missileArray[30])
 {
 	int max = 30, i, totalAlive;
