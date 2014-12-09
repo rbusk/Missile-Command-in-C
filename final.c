@@ -87,8 +87,8 @@ void checkIfBombInsideExplosion(Bomb bombArray[30],Explosion explosionArray[30])
 void initializeExplosion(Explosion explosionArray[30], Missile missileArray[30]);
 void drawExplosion(Explosion explosionArray[30]);
 void checkIfBombIsInCity(Bomb bombArray[30], City cityArray[6], int nBombs); //done
-void checkIfBombIsInBase(Bomb bombArray[30], Base baseArray[3], Missile missileArray[30], int nBombs);
-void removeMissiles(int n, Missile missileArray[30]);
+void checkIfBombIsInBase(Bomb bombArray[30], Base baseArray[3], Missile missileArray[30], int nBombs); //done
+void removeMissiles(int n, Missile missileArray[30]); //done
 
 int main()
 {
@@ -134,6 +134,38 @@ int main()
 
 
 }
+
+//removes missiles from a base that has been destroyed
+void removeMissiles(int n, Missile missileArray[30]) 
+{
+	//n is the index of the base
+
+	int i;
+	
+	if (n==0)
+	{
+		for (i=0; i<10; i++)
+		{
+			missileArray[i].status=dead;
+		}
+	}
+
+	if (n==1)
+	{
+		for (i=11; i<20; i++)
+		{
+			missileArray[i].status=dead;
+		}
+	}
+
+	if (n==2)
+	{
+		for (i=21; i<30; i++)
+		{
+			missileArray[i].status=dead;
+		}
+	}
+}
 //checks if Bomb has hit a base and changes statuses of bomb and base if necessary
 void checkIfBombIsInBase(Bomb bombArray[30], Base baseArray[3], Missile missileArray[30], int nBombs)
 {
@@ -151,7 +183,7 @@ void checkIfBombIsInBase(Bomb bombArray[30], Base baseArray[3], Missile missileA
 				{
 					bombArray[i].status=dead;
 					baseArray[n/4].status=dead;
-					//removeMissiles(n/4, missileArray); 
+					removeMissiles(n/4, missileArray); 
 				}
 			}
 		}
