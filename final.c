@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <time.h>
+#include <stdlib.h>
 #include "gfx3.h"
 
 struct Bomb
@@ -96,7 +97,15 @@ int main()
 	Bomb bombArray[30];
 	Explosion explosionArray[30];
 
+	
 	int currentLevel,maxLevel = 5;
+	int width = 700;
+	int height = 700;
+
+	gfx_open(width,height,"MISSILE COMMAND");
+	drawBases(baseArray);
+	drawCities(cityArray);
+	gfx_wait();
 	
 	for (currentLevel = 1; currentLevel <= maxLevel; currentLevel++)
 	{
@@ -125,7 +134,7 @@ void randomizeBomb(Bomb bombArray[30])
 		if (bombArray[i].status==alive)
 		{
 			bombArray[i].end= rand() % 9; //generate a number 0 through 8
-			bombArray[i].timeTilLaunch % 200; // generate a number 0 through 199
+			bombArray[i].timeTilLaunch = rand() % 200; // generate a number 0 through 199
 		}
 	}
 }
