@@ -25,8 +25,8 @@ struct Missile
 	int ystart;
 	double x;
 	double y;
-	int endx;
-	int endy;
+	int xend;
+	int yend;
 	double deltax;
 	double deltay;
 	int status;
@@ -85,7 +85,7 @@ void drawBases(Base baseArray[3], Missile missileArray[30]);//done
 void drawMissiles(Missile missileArray[30]);//done
 void drawBombs(Bomb bombArray[30]);//done
 void checkIfBombInsideExplosion(Bomb bombArray[30],Explosion explosionArray[30], int nBombs); //done
-void initializeExplosion(Explosion explosionArray[30], Missile missileArray[30]);
+void initializeExplosion(Explosion explosionArray[30], Missile missileArray[30], int *nExplosions);
 void drawExplosion(Explosion explosionArray[30]); //done
 void incrementExplosionRadius(Explosion explosionArray[30]); //done
 void checkIfBombIsInCity(Bomb bombArray[30], City cityArray[6], int nBombs); //done
@@ -108,6 +108,8 @@ int main()
 	int currentLevel,maxLevel = 5;
 	int width = 800;
 	int height = 700;
+
+	int nExplosions=0;
 
 	gfx_open(width,height,"MISSILE COMMAND");
 	
@@ -135,6 +137,27 @@ int main()
 	}
 
 
+}
+//initializes Explosion if missile has reached its destination
+void initializeExplosion(Explosion explosionArray[30], Missile missileArray[30], int *nExplosions)
+{
+	int i;
+
+	for (i=0; i<30; i++)
+	{
+		if ((missileArray[i].status==alive) && (missileArray[i].xend>missileArray[i].x) && (missileArray[i].yend>missileArray[i].y))
+		{
+			missileArray[i].status=dead;
+			
+			explosionArray[*nExplosions].status=alive;
+
+			explosionArray[*nExplosions].x=missileArray[i].xend;
+
+			explosionArray[*nExplosions].y=missileArray[i].yend;
+
+			*nExplosions+=1;
+		}
+	}
 }
 
 //increments radius of alive explosions
@@ -577,8 +600,8 @@ void initializeMissiles(Missile missileArray[30], Base baseArray[3])
 			missileArray[i].ystart = baseArray[0].yleft + 25;
 			missileArray[i].status = alive;
 			missileArray[i].baseNumber = 0;
-			missileArray[i].endx = 0;
-			missileArray[i].endy = 0;
+			missileArray[i].xend = 0;
+			missileArray[i].yend = 0;
 			missileArray[i].x = 0;
 			missileArray[i].y = 0;
 		}
@@ -588,8 +611,8 @@ void initializeMissiles(Missile missileArray[30], Base baseArray[3])
 			missileArray[i].ystart = baseArray[1].yleft + 25;
 			missileArray[i].status = alive;
 			missileArray[i].baseNumber = 1;
-			missileArray[i].endx = 0;
-			missileArray[i].endy = 0;
+			missileArray[i].xend = 0;
+			missileArray[i].yend = 0;
 			missileArray[i].x = 0;
 			missileArray[i].y = 0;
 		}
@@ -599,8 +622,8 @@ void initializeMissiles(Missile missileArray[30], Base baseArray[3])
 			missileArray[i].ystart = baseArray[2].yleft + 25;
 			missileArray[i].status = alive;
 			missileArray[i].baseNumber = 2;
-			missileArray[i].endx = 0;
-			missileArray[i].endy = 0;
+			missileArray[i].xend = 0;
+			missileArray[i].yend = 0;
 			missileArray[i].x = 0;
 			missileArray[i].y = 0;
 		}
