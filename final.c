@@ -136,6 +136,20 @@ int main()
 
 }
 
+//draws explosion if explosion is alive
+void drawExplosion(Explosion explosionArray[30])
+{
+	int i;
+
+	for (i=0; i<30; i++)
+	{
+		if (explosionArray[i].status==alive)
+		{
+			gfx_circle(explosionArray[i].x, explosionArray[i].y, explosionArray[i].radius);
+		}
+	}
+}
+
 //checks if Bomb is inside an explosion and, if so, changes its status to dead
 void checkIfBombInsideExplosion(Bomb bombArray[30],Explosion explosionArray[30], int nBombs) 
 {
