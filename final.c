@@ -86,7 +86,8 @@ void drawMissiles(Missile missileArray[30]);//done
 void drawBombs(Bomb bombArray[30]);//done
 void checkIfBombInsideExplosion(Bomb bombArray[30],Explosion explosionArray[30], int nBombs); //done
 void initializeExplosion(Explosion explosionArray[30], Missile missileArray[30]);
-void drawExplosion(Explosion explosionArray[30]);
+void drawExplosion(Explosion explosionArray[30]); //done
+void incrementExplosionRadius(Explosion explosionArray[30]); //done
 void checkIfBombIsInCity(Bomb bombArray[30], City cityArray[6], int nBombs); //done
 void checkIfBombIsInBase(Bomb bombArray[30], Base baseArray[3], Missile missileArray[30], int nBombs); //done
 void removeMissiles(int n, Missile missileArray[30]); //done
@@ -136,6 +137,31 @@ int main()
 
 }
 
+//increments radius of alive explosions
+void incrementExplosionRadius(Explosion explosionArray[30])
+{
+	int initialr=10, deltar=5, maxr=35;
+
+	int i;
+
+	for (i=0; i<30; i++)
+	{
+		if (explosionArray[i].radius==0) // if explosion has just been set to alive, start with initial radius
+		{
+			explosionArray[i].radius=initialr;
+		}
+
+		else if (explosionArray[i].radius>=maxr) //if explosion has reached max radius, set status to dead
+		{
+			explosionArray[i].status==dead;
+		}
+
+		else //else increment the radius by deltar
+		{
+			explosionArray[i].radius+=deltar;
+		}
+	}
+}
 //draws explosion if explosion is alive
 void drawExplosion(Explosion explosionArray[30])
 {
