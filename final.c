@@ -21,6 +21,7 @@ struct Bomb
 
 struct Missile
 {
+	int start; //0 through 8
 	int xstart;
 	int ystart;
 	double x;
@@ -85,7 +86,7 @@ void drawBases(Base baseArray[3], Missile missileArray[30]);//done
 void drawMissiles(Missile missileArray[30]);//done
 void drawBombs(Bomb bombArray[30]);//done
 void checkIfBombInsideExplosion(Bomb bombArray[30],Explosion explosionArray[30], int nBombs); //done
-void initializeExplosion(Explosion explosionArray[30], Missile missileArray[30], int *nExplosions);
+void initializeExplosion(Explosion explosionArray[30], Missile missileArray[30], int *nExplosions); //done
 void drawExplosion(Explosion explosionArray[30]); //done
 void incrementExplosionRadius(Explosion explosionArray[30]); //done
 void checkIfBombIsInCity(Bomb bombArray[30], City cityArray[6], int nBombs); //done
@@ -421,7 +422,7 @@ void initializeStructures(City cityArray[6], Base baseArray[3])
 	}
 }
 
-//given the number n from 0-8, calculates the 
+//given the number n from 0-8, calculates the cooresponding coordinate 
 void bombDestination(City cityArray[6], Base baseArray[3], Bomb bombArray[30])
 {
 	int i, n;
