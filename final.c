@@ -88,6 +88,7 @@ void drawMissiles(Missile missileArray[30]);//done
 void drawBombs(Bomb bombArray[30]);//done
 void checkIfBombInsideExplosion(Bomb bombArray[30],Explosion explosionArray[30], int nBombs); //done
 void startExplosion(Explosion explosionArray[30], Missile missileArray[30]); //done
+void initializeExplosion(Explosion explosionArray[30]); //done
 void drawExplosion(Explosion explosionArray[30]); //done
 void incrementExplosionRadius(Explosion explosionArray[30]); //done
 void checkIfBombIsInCity(Bomb bombArray[30], City cityArray[6], int nBombs); //done
@@ -121,6 +122,7 @@ int main()
 		initializeStructures(cityArray,baseArray); //done
 		initializeMissiles(missileArray, baseArray);
 		initializeBomb(bombArray,cityArray, baseArray, currentLevel);
+		initializeExplosion(explosionArray);
 
 		while (!win(bombArray, missileArray, cityArray) && !lose(bombArray, missileArray, cityArray))
 		{
@@ -140,6 +142,17 @@ int main()
 
 
 }
+//sets the status of all explosions to unused
+void initializeExplosion(Explosion explosionArray[30])
+{
+	int i;
+
+	for(i=0; i<30; i++)
+	{
+		explosionArray[i].status=unused;
+	}
+}
+
 //starts Explosion if missile has reached its destination
 void startExplosion(Explosion explosionArray[30], Missile missileArray[30])
 {
