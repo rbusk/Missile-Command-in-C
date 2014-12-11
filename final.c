@@ -93,8 +93,6 @@ void incrementExplosionRadius(Explosion explosionArray[30]); //done
 void incrementBomb(Bomb bombArray[30], int nBombs); //done
 void incrementMissile(Missile missileArray[30]); //done
 void deployBomb(Bomb bombArray[30], int nBombs);
-void checkIfBombIsInCity(Bomb bombArray[30], City cityArray[6], int nBombs); //done
-void checkIfBombIsInBase(Bomb bombArray[30], Base baseArray[3], Missile missileArray[30], Explosion explosionMissileArray[30], int nBombs); //done
 void removeMissiles(int n, Missile missileArray[30]); //done
 void setOffMissile(Missile missileArray[30], char c, double x, double y); //done
 void missilePath(Missile *missile); //done
@@ -437,6 +435,7 @@ void checkIfBombInsideExplosion(Bomb bombArray[30],Explosion explosionArray[30],
 				{
 					bombArray[i].status=dead;
 				}
+
 			}
 		}
 	}
@@ -470,35 +469,6 @@ void removeMissiles(int n, Missile missileArray[30])
 		for (i=20; i<30; i++)
 		{
 			missileArray[i].status=dead;
-		}
-	}
-}
-//checks if Bomb has hit a base and changes statuses of bomb and base if necessary
-/*void checkIfBombIsInBase(Bomb bombArray[30], Base baseArray[3], Missile missileArray[30], Explosion explosionMissileArray[30], int nBombs)
-{
-	int i, n;
-
-	for (i=0; i<nBombs; i++)
-	{
-		n=bombArray[i].end;
-
-		if (bombArray[i].status==alive)
-		{
-			//printf("The status of %i is %i\n", i, bombArray[i].status);
-			if ((n==0) || (n==4) || (n==8))
-			{
-				if (bombArray[i].y>bombArray[i].yend)
-				{
-					//printf("%lf %lf\n", bombArray[i].y, bombArray[i].yend);
-					bombArray[i].status=dead;
-					//printf("Bomb #%i is %i\n\n\n", i, bombArray[i].status);
-					baseArray[n/4].status=dead;
-					removeMissiles(n/4, missileArray); 
-					
-					//startMissileExplosion(baseArray[n/4].xleft+25, baseArray[n/4].yleft, explosionMissileArray);
-					//printf("\n%i\n", i);
-				}
-			}
 		}
 	}
 }
@@ -536,7 +506,7 @@ void checkIfBombIsInCity(Bomb bombArray[30], City cityArray[6], int nBombs)
 		}
 	}
 				
-}*/
+}
 
 //initializes variables for bombs
 void initializeBomb(Bomb bombArray[30], City cityArray[6], Base baseArray[3],int currentLevel)
