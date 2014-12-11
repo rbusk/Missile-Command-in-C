@@ -940,7 +940,7 @@ void deployBomb(Bomb bombArray[30], int nBombs)
 	for (i = 0; i < nBombs; i++)
 	{
 
-		if (bombArray[i].timeTilLaunch == 0)
+		if (bombArray[i].timeTilLaunch == 0 && bombArray[i].status != alive)
 		{
 			bombArray[i].status = alive;
 		}
