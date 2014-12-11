@@ -55,8 +55,8 @@ struct Base
 
 struct Explosion
 {
-	int x;
-	int y;
+	double x;
+	double y;
 	double radius;
 	double deltaR;
 	int status;
@@ -305,6 +305,8 @@ void startExplosion(Explosion explosionArray[30], Missile missileArray[30])
 
 			explosionArray[j].y=missileArray[i].yend;
 
+			printf("%lf %lf",explosionArray[j].x,explosionArray[j].y);
+
 			explosionArray[j].radius=0;
 		}
 	}
@@ -313,25 +315,29 @@ void startExplosion(Explosion explosionArray[30], Missile missileArray[30])
 //increments radius of alive explosions
 void incrementExplosionRadius(Explosion explosionArray[30])
 {
-	int initialr=10, deltar=5, maxr=35;
+	double initialr=10, deltar=5, maxr=35;
 
 	int i;
 
 	for (i=0; i<30; i++)
 	{
-		if (explosionArray[i].radius==0) // if explosion has just been set to alive, start with initial radius
+		if (explosionArray[i].status == alive)
 		{
-			explosionArray[i].radius=initialr;
-		}
+			printf("%lf",explosionArray[i].radius);
+			if (explosionArray[i].radius==0) // if explosion has just been set to alive, start with initial radius
+			{
+				explosionArray[i].radius=initialr;
+			}
 
-		else if (explosionArray[i].radius>=maxr) //if explosion has reached max radius, set status to dead
-		{
-			explosionArray[i].status==dead;
-		}
+			else if (explosionArray[i].radius>=maxr) //if explosion has reached max radius, set status to dead
+			{
+				explosionArray[i].status==dead;
+			}
 
-		else //else increment the radius by deltar
-		{
-			explosionArray[i].radius+=deltar;
+			else //else increment the radius by deltar
+			{
+				explosionArray[i].radius+=deltar;
+			}
 		}
 	}
 }
