@@ -96,7 +96,8 @@ void deployBomb(Bomb bombArray[30], int nBombs);
 void checkIfBombIsInCity(Bomb bombArray[30], City cityArray[6], int nBombs); //done
 void checkIfBombIsInBase(Bomb bombArray[30], Base baseArray[3], Missile missileArray[30], int nBombs); //done
 void removeMissiles(int n, Missile missileArray[30]); //done
-void setOffMissile(Missile missileArray[30], char c);
+void setOffMissile(Missile missileArray[30], char c, int x, int y); //done
+void missilePath(Missile missile); //done
 
 int main()
 {
@@ -132,11 +133,6 @@ int main()
 
 		while (!win(bombArray, missileArray, cityArray) && !lose(bombArray, missileArray, cityArray))
 		{
-			if (lose(bombArray, missileArray, cityArray))
-			{
-				break;
-			}
-
 			drawBases(baseArray,missileArray);
 			drawCities(cityArray);
 			drawBombs(bombArray);
@@ -151,14 +147,114 @@ int main()
 
 			if ((c=='a') || (c=='s') || (c=='d') || (c=='w'))
 			{
-				//setOffMissile(missileArray, c);
+				setOffMissile(missileArray, c, x, y);
 			}
 		}
-		
+
+		if (lose(bombArray, missileArray, cityArray))
+		{
+			break;
+		}
 	}
 
 
 }
+
+//calculates deltax and deltay for missile that has been set off
+void missilePath(Missile missile)
+{
+	double speed=.7;
+
+	double x, y, theta;
+
+	x=missile.xstart-missile.xend;
+
+	y=missile.ystart-missile.yend;
+
+	theta=atan(y/x);
+
+	missile.deltax=cos(theta)*speed;
+
+	missile.deltay=sin(theta)*speed;
+}
+
+
+//sets off a missile cooresponding to user's input
+void setOffMissile(Missile missileArray[30], char c, int x, int y)
+{
+	int i;
+
+	if (c=='a')
+	{
+		i=0;
+
+		while ((missileArray[i].status!=unused) && (i<=9))
+		{
+			i++;
+		}
+
+		if (i>=10)
+		{
+			return;
+		}
+
+		missileArray[i].status=alive;
+
+		missileArray[i].xend=x;
+
+		missileArray[i].yend=y;
+
+		missilePath(missileArray[i]); //calculate deltax and deltay
+	}
+
+	else if ((c=='w') || (c=='s'))
+	{
+		i=10;
+
+		while((missileArray[i].status!=unused) && (i<=19))
+		{
+			i++;
+		}
+
+		if (i>=20)
+		{
+			return;
+		}
+
+		missileArray[i].status=alive;
+
+		missileArray[i].xend=x;
+
+		missileArray[i].yend=y;
+
+		missilePath(missileArray[i]); //calculate deltax and deltay
+		
+	}
+
+	else if (c=='d')
+	{
+		i=20;
+
+		while((missileArray[i].status!=unused) && (i<=29))
+		{
+			i++;
+		}
+
+		if (i>=30)
+		{
+			return;
+		}
+
+		missileArray[i].status=alive;
+
+		missileArray[i].xend=x;
+
+		missileArray[i].yend=y;
+
+		missilePath(missileArray[i]); //calculate deltax and deltay
+	}
+}
+
 //sets the status of all explosions to unused
 void initializeExplosion(Explosion explosionArray[30])
 {
@@ -397,7 +493,7 @@ void bombSpeed(Bomb bombArray[30], int currentLevel)
 
 		bombArray[i].deltax=cos(theta)*speed;
 
-		bombArray[i].deltay=cos(theta)*speed;
+		bombArray[i].deltay=sin(theta)*speed;
 	}
 }
 
