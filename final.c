@@ -116,6 +116,7 @@ int main()
 	int currentLevel,maxLevel = 5;
 	int width = 800;
 	int height = 700;
+	int j;
 
 	double x, y; //coordinates of mouse when an event occurs
 
@@ -163,9 +164,15 @@ int main()
 			incrementBomb(bombArray, nBombs);
 			checkIfBombIsInCity(bombArray, cityArray, nBombs);
 			checkIfBombIsInBase(bombArray, baseArray, missileArray, nBombs);
-			//incrementMissile(missileArray);
-			//startExplosion(explosionArray, missileArray);
-			//incrementExplosionRadius(explosionArray);
+			incrementMissile(missileArray);
+			startExplosion(explosionArray, missileArray);
+			incrementExplosionRadius(explosionArray);
+			checkIfBombInsideExplosion(bombArray, explosionArray, nBombs);
+
+			for (j = 0; j < 30; j++)
+			{
+				printf("%lf\n",bombArray[j].deltax);
+			}
 
 		}
 
@@ -403,7 +410,7 @@ void removeMissiles(int n, Missile missileArray[30])
 
 	if (n==1)
 	{
-		for (i=11; i<20; i++)
+		for (i=10; i<20; i++)
 		{
 			missileArray[i].status=dead;
 		}
@@ -411,7 +418,7 @@ void removeMissiles(int n, Missile missileArray[30])
 
 	if (n==2)
 	{
-		for (i=21; i<30; i++)
+		for (i=20; i<30; i++)
 		{
 			missileArray[i].status=dead;
 		}
@@ -454,7 +461,7 @@ void checkIfBombIsInCity(Bomb bombArray[30], City cityArray[6], int nBombs)
 		{
 			if ((n>=1) && (n<=3))
 			{
-				if ((bombArray[i].x>bombArray[i].xend) && (bombArray[i].y>bombArray[i].yend))
+				if ((bombArray[i].y>bombArray[i].yend))
 				{
 					//make explosion
 					cityArray[n-1].status=dead;
@@ -464,7 +471,7 @@ void checkIfBombIsInCity(Bomb bombArray[30], City cityArray[6], int nBombs)
 
 			if ((n>=5) && (n<=7))
 			{	
-				if ((bombArray[i].x>bombArray[i].xend) && (bombArray[i].y>bombArray[i].yend))
+				if ((bombArray[i].y>bombArray[i].yend))
 				{
 					//make explosion
 					cityArray[n-2].status=dead;
@@ -530,12 +537,9 @@ void randomizeBomb(Bomb bombArray[30])
 
 	for (i=0; i<30; i++)
 	{
-		if (bombArray[i].status==alive)
-		{
-			bombArray[i].end= rand() % 9; //generate a number 0 through 8
-			bombArray[i].timeTilLaunch= rand() % 200; // generate a number 0 through 199
-			bombArray[i].xstart = rand() % 700 +1; // generate a number 1 to 700
-		}
+		bombArray[i].end= rand() % 9; //generate a number 0 through 8
+		bombArray[i].timeTilLaunch= rand() % 200; // generate a number 0 through 199
+		bombArray[i].xstart = rand() % 700 +1; // generate a number 1 to 700
 	}
 }
 
@@ -786,7 +790,7 @@ void initializeMissiles(Missile missileArray[30], Base baseArray[3])
 		if (i >=20 && i < 30)
 		{
 			missileArray[i].xstart = baseArray[2].xleft + 25;
-			missileArray[i].ystart = baseArray[2].yleft + 25;
+			missileArray[i].ystart = baseArray[2].yleft;
 			missileArray[i].status = unused;
 			missileArray[i].baseNumber = 2;
 			missileArray[i].xend = 0;
@@ -819,7 +823,7 @@ void drawBombs(Bomb bombArray[30])
 
 	for (i = 0; i < 30; i++)
 	{
-		if (bombArray[i].status == alive && bombArray[i].x != 0 && bombArray[i].y != 0)
+		if (bombArray[i].status == alive)
 		{
 			gfx_line(bombArray[i].xstart,bombArray[i].ystart,bombArray[i].x,bombArray[i].y);
 
@@ -836,8 +840,16 @@ void incrementBomb(Bomb bombArray[30], int nBombs)
 	{
 		if (bombArray[i].status == alive)
 		{
-			bombArray[i].x += bombArray[i].deltax;
 			bombArray[i].y += bombArray[i].deltay;
+
+			if (bombArray[i].xstart >= bombArray[i].xend)
+			{
+				bombArray[i].x -= bombArray[i].deltax;
+			}
+			if (bombArray[i].xstart < bombArray[i].xend)
+			{
+				bombArray[i].x += bombArray[i].deltax;
+			}	
 		}
 	}
 }
