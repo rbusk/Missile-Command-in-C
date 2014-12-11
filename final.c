@@ -7,13 +7,13 @@
 
 struct Bomb
 {
-	int xstart;
-	int ystart;
+	double xstart;
+	double ystart;
 	double deltax;
 	double deltay;
-	int end; //0 through 8
-	int xend;
-	int yend;
+	double end; //0 through 8
+	double xend;
+	double yend;
 	double x;
 	double y;
 	int status;
@@ -22,12 +22,12 @@ struct Bomb
 
 struct Missile
 {
-	int xstart;
-	int ystart;
+	double xstart;
+	double ystart;
 	double x;
 	double y;
-	int xend;
-	int yend;
+	double xend;
+	double yend;
 	double deltax;
 	double deltay;
 	int status;
@@ -96,7 +96,7 @@ void deployBomb(Bomb bombArray[30], int nBombs);
 void checkIfBombIsInCity(Bomb bombArray[30], City cityArray[6], int nBombs); //done
 void checkIfBombIsInBase(Bomb bombArray[30], Base baseArray[3], Missile missileArray[30], int nBombs); //done
 void removeMissiles(int n, Missile missileArray[30]); //done
-void setOffMissile(Missile missileArray[30], char c, int x, int y); //done
+void setOffMissile(Missile missileArray[30], char c, double x, double y); //done
 void missilePath(Missile missile); //done
 
 int main()
@@ -117,7 +117,7 @@ int main()
 	int width = 800;
 	int height = 700;
 
-	int x, y; //coordinates of mouse when an event occurs
+	double x, y; //coordinates of mouse when an event occurs
 
 	int nExplosions=0, nBombs;
 
@@ -134,6 +134,8 @@ int main()
 
 		while (!win(bombArray, missileArray, cityArray) && !lose(bombArray, missileArray, cityArray))
 		{
+			gfx_clear();
+
 			drawBases(baseArray,missileArray);
 			drawCities(cityArray);
 			drawBombs(bombArray);
@@ -153,11 +155,12 @@ int main()
 			if ((c=='a') || (c=='s') || (c=='d') || (c=='w'))
 			{
 				setOffMissile(missileArray, c, x, y);
+				c=' ';
 			}
 
 			//incrementExplosionRadius(explosionArray);
 			incrementBomb(bombArray, nBombs);
-			//incrementMissile(missileArray);
+			incrementMissile(missileArray);
 		}
 
 		if (lose(bombArray, missileArray, cityArray))
@@ -172,6 +175,7 @@ int main()
 //calculates deltax and deltay for missile that has been set off
 void missilePath(Missile missile)
 {
+	printf("calculating missile path\n");
 	double speed=.7;
 
 	double x, y, theta;
@@ -180,16 +184,18 @@ void missilePath(Missile missile)
 
 	y=missile.ystart-missile.yend;
 
-	theta=atan(y/x);
+	theta=atan(y/abs(x));
 
 	missile.deltax=cos(theta)*speed;
+	printf("%lf\n", missile.deltax);
 
 	missile.deltay=sin(theta)*speed;
+	printf("%lf\n", missile.deltay);
 }
 
 
 //sets off a missile cooresponding to user's input
-void setOffMissile(Missile missileArray[30], char c, int x, int y)
+void setOffMissile(Missile missileArray[30], char c, double x, double y)
 {
 	int i;
 
@@ -498,7 +504,7 @@ void bombSpeed(Bomb bombArray[30], int currentLevel)
 
 		y=bombArray[i].yend-bombArray[i].ystart;
 
-		theta=atan(y/x);
+		theta=atan(y/abs(x));
 
 		bombArray[i].deltax=cos(theta)*speed;
 
@@ -720,7 +726,7 @@ void drawBases(Base baseArray[3], Missile missileArray[30])
 
 		for (j = 0; j < 30; j++)
 		{
-			if (missileArray[j].baseNumber == i && missileArray[j].status == alive)
+			if ((missileArray[j].baseNumber == i) && (missileArray[j].status == unused))
 			{
 				totalMissile++;
 			}
@@ -783,7 +789,7 @@ void drawMissiles(Missile missileArray[30])
 
 	for (i = 0; i < 30; i++)
 	{
-		if (missileArray[i].status == alive && missileArray[i].x != 0 && missileArray[i].y != 0)
+		if (missileArray[i].status == alive)
 		{
 			gfx_line(missileArray[i].xstart,missileArray[i].ystart,missileArray[i].x,missileArray[i].y);
 
@@ -828,10 +834,23 @@ void incrementMissile(Missile missileArray[30])
 	{
 		if (missileArray[i].status == alive)
 		{
-			missileArray[i].x -= missileArray[i].deltax;
 			missileArray[i].y -= missileArray[i].deltay;
+
+			if (missileArray[i].xstart >= missileArray[i].xend)
+			{
+				missileArray[i].x -= missileArray[i].deltax;
+			}
+			if (missileArray[i].xstart < missileArray[i].xend)
+			{
+				missileArray[i].x += missileArray[i].deltax;
+			}	
 		}
 	}
+
+	printf("%lf\n", missileArray[0].x);
+
+	printf("%lf\n", missileArray[0].y);
+
 }
 
 void deployBomb(Bomb bombArray[30], int nBombs)
