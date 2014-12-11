@@ -373,7 +373,7 @@ void startExplosion(Explosion explosionArray[30], Missile missileArray[30])
 //increments radius of alive explosions
 void incrementExplosionRadius(Explosion explosionArray[30])
 {
-	double initialr=10, deltar=1, maxr=35;
+	double initialr=10, deltar=.5, maxr=35;
 	int i;
 
 	for (i=0; i<30; i++)
@@ -433,7 +433,7 @@ void checkIfBombInsideExplosion(Bomb bombArray[30],Explosion explosionArray[30],
 
 			if((bombArray[i].status==alive) && (explosionArray[j].status==alive))
 			{
-				if (explosionArray[i].radius>(sqrt((xbomb-xexp)*(xbomb-xexp)+(ybomb-yexp)*(ybomb-yexp))))
+				if ((explosionArray[i].radius+2*explosionArray[i].deltaR)>(sqrt((xbomb-xexp)*(xbomb-xexp)+(ybomb-yexp)*(ybomb-yexp))))
 				{
 					bombArray[i].status=dead;
 				}
@@ -593,7 +593,7 @@ void randomizeBomb(Bomb bombArray[30])
 	for (i=0; i<30; i++)
 	{
 		bombArray[i].end= rand() % 9; //generate a number 0 through 8
-		bombArray[i].timeTilLaunch= rand() % 200; // generate a number 0 through 199
+		bombArray[i].timeTilLaunch= rand() % 700; // generate a number 0 through 199
 		bombArray[i].xstart = rand() % 700 +1; // generate a number 1 to 700
 	}
 }
