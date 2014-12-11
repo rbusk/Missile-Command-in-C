@@ -148,7 +148,7 @@ int main()
 
 			gfx_flush();
 
-			usleep(20000);
+			usleep(10000);
 
 			if (gfx_event_waiting())
 			{
@@ -163,10 +163,13 @@ int main()
 				c=' ';
 			}
 
-			//incrementBomb(bombArray, nBombs);
-			incrementMissile(missileArray);
-			startExplosion(explosionArray, missileArray);
-			incrementExplosionRadius(explosionArray);
+			deployBomb(bombArray, nBombs);
+			incrementBomb(bombArray, nBombs);
+			checkIfBombIsInCity(bombArray, cityArray, nBombs);
+			checkIfBombIsInBase(bombArray, baseArray, missileArray, nBombs);
+			//incrementMissile(missileArray);
+			//startExplosion(explosionArray, missileArray);
+			//incrementExplosionRadius(explosionArray);
 
 		}
 
