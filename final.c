@@ -433,7 +433,7 @@ void checkIfBombInsideExplosion(Bomb bombArray[30],Explosion explosionArray[30],
 
 			if((bombArray[i].status==alive) && (explosionArray[j].status==alive))
 			{
-				if ((explosionArray[i].radius+2*explosionArray[i].deltaR)>(sqrt((xbomb-xexp)*(xbomb-xexp)+(ybomb-yexp)*(ybomb-yexp))))
+				if ((explosionArray[i].radius+explosionArray[i].deltaR)>(sqrt((xbomb-xexp)*(xbomb-xexp)+(ybomb-yexp)*(ybomb-yexp))))
 				{
 					bombArray[i].status=dead;
 				}
@@ -569,7 +569,7 @@ void bombSpeed(Bomb bombArray[30], int currentLevel)
 
 	double x, y, theta;
 
-	double speed=currentLevel*1;
+	double speed=currentLevel*.5;
 
 	for(i=0; i<30; i++)
 	{
