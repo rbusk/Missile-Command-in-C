@@ -74,7 +74,6 @@ int checkNumberOfMissiles(Missile missileArray[30]); //done
 int checkNumberOfCities(City cityArray[6]); //done
 int win(Bomb bombArray[30],Missile missileArray[30], City cityArray[6]); //done
 int lose(Bomb bombArray[30], Missile missileArray[30], City cityArray[6]); //done
-int numberOfBombs(int currentLevel); //done
 void initializeBomb(Bomb bombArray[30], City cityArray[6], Base baseArray[3],int currentLevel); //done
 void randomizeBomb(Bomb bombArray[30]); //done
 void bombDestination(City cityArray[6], Base baseArray[3], Bomb bombArray[30]); //done
@@ -119,7 +118,7 @@ int main()
 
 	int x, y; //coordinates of mouse when an event occurs
 
-	int nExplosions=0;
+	int nExplosions=0, nBombs;
 
 	gfx_open(width,height,"MISSILE COMMAND");
 	
@@ -130,6 +129,7 @@ int main()
 		initializeMissiles(missileArray, baseArray);
 		initializeBomb(bombArray,cityArray, baseArray, currentLevel);
 		initializeExplosion(explosionArray);
+		nBombs= numberOfBombs(currentLevel);
 
 		while (!win(bombArray, missileArray, cityArray) && !lose(bombArray, missileArray, cityArray))
 		{
@@ -137,6 +137,10 @@ int main()
 			drawCities(cityArray);
 			drawBombs(bombArray);
 			drawMissiles(missileArray);
+
+			gfx_flush();
+
+			usleep(20000);
 
 			if (gfx_event_waiting())
 			{
@@ -149,6 +153,10 @@ int main()
 			{
 				setOffMissile(missileArray, c, x, y);
 			}
+
+			incrementExplosionRadius(explosionArray);
+			incrementBomb(bombArray, nBombs);
+			incrementMissile(missileArray);
 		}
 
 		if (lose(bombArray, missileArray, cityArray))
