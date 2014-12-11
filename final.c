@@ -203,18 +203,21 @@ void drawExplosion(Explosion explosionArray[30])
 //checks if Bomb is inside an explosion and, if so, changes its status to dead
 void checkIfBombInsideExplosion(Bomb bombArray[30],Explosion explosionArray[30], int nBombs) 
 {
-	int i, j, x, y; //x and y are the coordinates of the bomb
+	int i, j, xbomb, ybomb, xexp, yexp;
 
 	for(i=0; i<nBombs; i++)
 	{
-		x=bombArray[i].x;
-		y=bombArray[i].y;
+		xbomb=bombArray[i].x;
+		ybomb=bombArray[i].y;
 
 		for (j=0; j<30; j++)
 		{
+			xexp=explosionArray[j].x;
+			yexp=explosionArray[j].y;
+
 			if((bombArray[i].status==alive) && (explosionArray[j].status==alive))
 			{
-				if (explosionArray[j].radius>sqrt(x*x+y*y))
+				if (explosionArray[i].radius>(sqrt((xbomb-xexp)*(xbomb-xexp)+(ybomb-yexp)*(ybomb-yexp))))
 				{
 					bombArray[i].status=dead;
 				}
