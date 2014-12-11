@@ -219,7 +219,9 @@ void setOffMissile(Missile missileArray[30], char c, double x, double y)
 
 		missileArray[i].yend=y;
 
-		missilePath(missileArray[i]); //calculate deltax and deltay
+		printf("xend %lf\n yend %lf\n",missileArray[i].xend,missileArray[i].yend);
+
+		missilePath(missileArray[i-1]); //calculate deltax and deltay
 	}
 
 	else if ((c=='w') || (c=='s'))
