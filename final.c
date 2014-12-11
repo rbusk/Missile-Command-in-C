@@ -36,8 +36,8 @@ struct Missile
 
 struct City
 {
-	int xleft;
-	int yleft;
+	double xleft;
+	double yleft;
 	int width;
 	int height;
 	int status;
@@ -45,8 +45,8 @@ struct City
 
 struct Base
 {
-	int xleft;
-	int yleft;
+	double xleft;
+	double yleft;
 	int width;
 	int height;
 	int missileNumber;
@@ -98,7 +98,7 @@ void checkIfBombIsInBase(Bomb bombArray[30], Base baseArray[3], Missile missileA
 void removeMissiles(int n, Missile missileArray[30]); //done
 void setOffMissile(Missile missileArray[30], char c, double x, double y); //done
 void missilePath(Missile *missile); //done
-void startMissileExplosion(int x, int y, Explosion explosionMissileArray[30]);
+void startMissileExplosion(double x, double y, Explosion explosionMissileArray[30]);
 
 int main()
 {
@@ -133,8 +133,11 @@ int main()
 		initializeBomb(bombArray,cityArray, baseArray, currentLevel);
 		initializeExplosion(explosionArray);
 		initializeExplosion(explosionMissileArray);
+		int i;
 		nBombs= numberOfBombs(currentLevel);
-
+		for (i=0; i<nBombs; i++)
+			printf("%i ", bombArray[i].status);
+			printf("\n");
 		while (!win(bombArray, missileArray, cityArray) && !lose(bombArray, missileArray, cityArray))
 		{
 			gfx_clear();
@@ -166,11 +169,15 @@ int main()
 			deployBomb(bombArray, nBombs);
 			incrementBomb(bombArray, nBombs);
 			checkIfBombIsInCity(bombArray, cityArray, nBombs);
-			checkIfBombIsInBase(bombArray, baseArray, missileArray, nBombs);
-			//incrementMissile(missileArray);
-			//startExplosion(explosionArray, missileArray);
-			//incrementExplosionRadius(explosionArray);
-
+			checkIfBombIsInBase(bombArray, baseArray, missileArray, explosionMissileArray, nBombs);
+			incrementMissile(missileArray);
+			startExplosion(explosionArray, missileArray);
+			incrementExplosionRadius(explosionArray);
+			int i;
+			
+			for (i=0; i<nBombs; i++)
+				printf("%i ", bombArray[i].status);
+				printf("\n");
 		}
 
 		if (lose(bombArray, missileArray, cityArray))
@@ -182,16 +189,17 @@ int main()
 
 }
 
-void startMissileExplosion(int x, int y, Explosion explosionMissileArray[30])
+void startMissileExplosion(double x, double y, Explosion explosionMissileArray[30])
 {
+//	printf("starting missile explosion");
 	int i=0;
 
 	while (explosionMissileArray[i].status!=unused)
 	{
 		i++;
 	}
-
-	explosionMissileArray[i].status=alive;
+//	printf("%i", i);
+	explosionMissileArray[0].status=alive;
 
 	explosionMissileArray[i].radius=0;
 
@@ -452,12 +460,13 @@ void checkIfBombIsInBase(Bomb bombArray[30], Base baseArray[3], Missile missileA
 		{
 			if ((n==0) || (n==4) || (n==8))
 			{
-				if ((bombArray[i].x>bombArray[i].xend) && (bombArray[i].y>bombArray[i].yend))
+				if (bombArray[i].y>bombArray[i].yend)
 				{
 					bombArray[i].status=dead;
 					baseArray[n/4].status=dead;
 					removeMissiles(n/4, missileArray); 
-					startMissileExplosion(baseArray[n/4].xleft+25, baseArray[n/4].yleft+25, explosionMissileArray);
+					
+					startMissileExplosion(baseArray[n/4].xleft+25, baseArray[n/4].yleft, explosionMissileArray);
 				}
 			}
 		}
@@ -512,7 +521,7 @@ void initializeBomb(Bomb bombArray[30], City cityArray[6], Base baseArray[3],int
 	{
 		bombArray[i].ystart=0; //sets ystart
 
-		bombArray[i].status=dead; //sets status
+		bombArray[i].status=unused; //sets status
 
 		bombArray[i].x=bombArray[i].xstart;
 
@@ -530,7 +539,7 @@ void bombSpeed(Bomb bombArray[30], int currentLevel)
 
 	double x, y, theta;
 
-	double speed=currentLevel*.2;
+	double speed=currentLevel*1;
 
 	for(i=0; i<30; i++)
 	{
