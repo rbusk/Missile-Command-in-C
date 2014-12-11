@@ -94,6 +94,7 @@ void checkIfBombIsInCity(Bomb bombArray[30], City cityArray[6], int nBombs); //d
 void checkIfBombIsInBase(Bomb bombArray[30], Base baseArray[3], Missile missileArray[30], int nBombs); //done
 void removeMissiles(int n, Missile missileArray[30]); //done
 void setOffMissile(Missile missileArray[30], char c, int x, int y); //done
+void missilePath(Missile missile); //done
 
 int main()
 {
@@ -129,11 +130,6 @@ int main()
 
 		while (!win(bombArray, missileArray, cityArray) && !lose(bombArray, missileArray, cityArray))
 		{
-			if (lose(bombArray, missileArray, cityArray))
-			{
-				break;
-			}
-
 			drawBases(baseArray,missileArray);
 			drawCities(cityArray);
 			drawBombs(bombArray);
@@ -151,11 +147,34 @@ int main()
 				setOffMissile(missileArray, c, x, y);
 			}
 		}
-		
+
+		if (lose(bombArray, missileArray, cityArray))
+		{
+			break;
+		}
 	}
 
 
 }
+
+//calculates deltax and deltay for missile that has been set off
+void missilePath(Missile missile)
+{
+	double speed=.7;
+
+	double x, y, theta;
+
+	x=missile.xstart-missile.xend;
+
+	y=missile.ystart-missile.yend;
+
+	theta=atan(y/x);
+
+	missile.deltax=cos(theta)*speed;
+
+	missile.deltay=sin(theta)*speed;
+}
+
 
 //sets off a missile cooresponding to user's input
 void setOffMissile(Missile missileArray[30], char c, int x, int y)
@@ -182,7 +201,7 @@ void setOffMissile(Missile missileArray[30], char c, int x, int y)
 
 		missileArray[i].yend=y;
 
-		//missilePath(missileArray[i]); //calculate deltax and deltay
+		missilePath(missileArray[i]); //calculate deltax and deltay
 	}
 
 	else if ((c=='w') || (c=='s'))
@@ -205,7 +224,7 @@ void setOffMissile(Missile missileArray[30], char c, int x, int y)
 
 		missileArray[i].yend=y;
 
-		//missilePath(missileArray[i]); //calculate deltax and deltay
+		missilePath(missileArray[i]); //calculate deltax and deltay
 		
 	}
 
@@ -229,7 +248,7 @@ void setOffMissile(Missile missileArray[30], char c, int x, int y)
 
 		missileArray[i].yend=y;
 
-		//missilePath(missileArray[i]); //calculate deltax and deltay
+		missilePath(missileArray[i]); //calculate deltax and deltay
 	}
 }
 
