@@ -21,7 +21,6 @@ struct Bomb
 
 struct Missile
 {
-	int start; //0 through 8
 	int xstart;
 	int ystart;
 	double x;
@@ -65,7 +64,8 @@ struct Explosion
 enum STATUS
 {
 	dead,
-	alive
+	alive,
+	unused
 };
 
 int numberOfBombs(int currentLevel);//done
@@ -86,12 +86,14 @@ void drawBases(Base baseArray[3], Missile missileArray[30]);//done
 void drawMissiles(Missile missileArray[30]);//done
 void drawBombs(Bomb bombArray[30]);//done
 void checkIfBombInsideExplosion(Bomb bombArray[30],Explosion explosionArray[30], int nBombs); //done
-void initializeExplosion(Explosion explosionArray[30], Missile missileArray[30], int *nExplosions); //done
+void startExplosion(Explosion explosionArray[30], Missile missileArray[30]); //done
+void initializeExplosion(Explosion explosionArray[30]); //done
 void drawExplosion(Explosion explosionArray[30]); //done
 void incrementExplosionRadius(Explosion explosionArray[30]); //done
 void checkIfBombIsInCity(Bomb bombArray[30], City cityArray[6], int nBombs); //done
 void checkIfBombIsInBase(Bomb bombArray[30], Base baseArray[3], Missile missileArray[30], int nBombs); //done
 void removeMissiles(int n, Missile missileArray[30]); //done
+void setOffMissile(Missile missileArray[30], char c);
 
 int main()
 {
@@ -105,10 +107,13 @@ int main()
 	Bomb bombArray[30];
 	Explosion explosionArray[30];
 
+	char c; //use to save user's input
 	
 	int currentLevel,maxLevel = 5;
 	int width = 800;
 	int height = 700;
+
+	int x, y; //coordinates of mouse when an event occurs
 
 	int nExplosions=0;
 
@@ -120,43 +125,73 @@ int main()
 		initializeStructures(cityArray,baseArray); //done
 		initializeMissiles(missileArray, baseArray);
 		initializeBomb(bombArray,cityArray, baseArray, currentLevel);
+		initializeExplosion(explosionArray);
 
 		while (!win(bombArray, missileArray, cityArray) && !lose(bombArray, missileArray, cityArray))
 		{
+			if (lose(bombArray, missileArray, cityArray))
+			{
+				break;
+			}
+
 			drawBases(baseArray,missileArray);
 			drawCities(cityArray);
 			drawBombs(bombArray);
 			drawMissiles(missileArray);
 
-		}
+			if (gfx_event_waiting())
+			{
+				c=gfx_wait();
+				x=gfx_xpos();
+				y=gfx_ypos();
+			}
 
-		if(lose(bombArray, missileArray, cityArray))
-		{
-			break;
+			if ((c=='a') || (c=='s') || (c=='d') || (c=='w'))
+			{
+				//setOffMissile(missileArray, c);
+			}
 		}
 		
 	}
 
 
 }
-//initializes Explosion if missile has reached its destination
-void initializeExplosion(Explosion explosionArray[30], Missile missileArray[30], int *nExplosions)
+//sets the status of all explosions to unused
+void initializeExplosion(Explosion explosionArray[30])
 {
 	int i;
 
+	for(i=0; i<30; i++)
+	{
+		explosionArray[i].status=unused;
+	}
+}
+
+//starts Explosion if missile has reached its destination
+void startExplosion(Explosion explosionArray[30], Missile missileArray[30])
+{
+	int i, j;
+
 	for (i=0; i<30; i++)
 	{
-		if ((missileArray[i].status==alive) && (missileArray[i].xend>missileArray[i].x) && (missileArray[i].yend>missileArray[i].y))
+		j=0;
+
+		if ((missileArray[i].status==alive) && (missileArray[i].xend>=missileArray[i].x) && (missileArray[i].yend>=missileArray[i].y))
 		{
+			while (explosionArray[j].status=unused)
+			{
+				j++;
+			}
+
 			missileArray[i].status=dead;
-			
-			explosionArray[*nExplosions].status=alive;
 
-			explosionArray[*nExplosions].x=missileArray[i].xend;
+			explosionArray[j].status=alive;
 
-			explosionArray[*nExplosions].y=missileArray[i].yend;
+			explosionArray[j].x=missileArray[i].xend;
 
-			*nExplosions+=1;
+			explosionArray[j].y=missileArray[i].yend;
+
+			explosionArray[j].radius=0;
 		}
 	}
 }
@@ -203,18 +238,21 @@ void drawExplosion(Explosion explosionArray[30])
 //checks if Bomb is inside an explosion and, if so, changes its status to dead
 void checkIfBombInsideExplosion(Bomb bombArray[30],Explosion explosionArray[30], int nBombs) 
 {
-	int i, j, x, y; //x and y are the coordinates of the bomb
+	int i, j, xbomb, ybomb, xexp, yexp;
 
 	for(i=0; i<nBombs; i++)
 	{
-		x1=bombArray[i].x;
-		y1=bombArray[i].y;
+		xbomb=bombArray[i].x;
+		ybomb=bombArray[i].y;
 
 		for (j=0; j<30; j++)
 		{
+			xexp=explosionArray[j].x;
+			yexp=explosionArray[j].y;
+
 			if((bombArray[i].status==alive) && (explosionArray[j].status==alive))
 			{
-				if (explosionArray[j].radius > sqrt((x1-explosionArray[j].x)(x1-explosionArray[j].x)+(y1-explosionArray[j].y)(y1-explosionArray[j].y)))
+				if (explosionArray[i].radius>(sqrt((xbomb-xexp)*(xbomb-xexp)+(ybomb-yexp)*(ybomb-yexp))))
 				{
 					bombArray[i].status=dead;
 				}
@@ -599,18 +637,18 @@ void initializeMissiles(Missile missileArray[30], Base baseArray[3])
 		{
 			missileArray[i].xstart = baseArray[0].xleft + 25;
 			missileArray[i].ystart = baseArray[0].yleft + 25;
-			missileArray[i].status = alive;
+			missileArray[i].status = unused;
 			missileArray[i].baseNumber = 0;
 			missileArray[i].xend = 0;
 			missileArray[i].yend = 0;
-			missileArray[i].x = 0;
-			missileArray[i].y = 0;
+			missileArray[i].x = missileArray[i].xstart;
+			missileArray[i].y = missileArray[i].ystart;
 		}
 		if (i >= 10 && i < 20)
 		{
 			missileArray[i].xstart = baseArray[1].xleft + 25;
 			missileArray[i].ystart = baseArray[1].yleft + 25;
-			missileArray[i].status = alive;
+			missileArray[i].status = unused;
 			missileArray[i].baseNumber = 1;
 			missileArray[i].xend = 0;
 			missileArray[i].yend = 0;
@@ -621,7 +659,7 @@ void initializeMissiles(Missile missileArray[30], Base baseArray[3])
 		{
 			missileArray[i].xstart = baseArray[2].xleft + 25;
 			missileArray[i].ystart = baseArray[2].yleft + 25;
-			missileArray[i].status = alive;
+			missileArray[i].status = unused;
 			missileArray[i].baseNumber = 2;
 			missileArray[i].xend = 0;
 			missileArray[i].yend = 0;
