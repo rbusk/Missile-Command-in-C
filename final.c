@@ -158,7 +158,7 @@ int main()
 				c=' ';
 			}
 
-			//incrementExplosionRadius(explosionArray);
+			incrementExplosionRadius(explosionArray);
 			//incrementBomb(bombArray, nBombs);
 			incrementMissile(missileArray);
 			startExplosion(explosionArray, missileArray);
@@ -289,9 +289,9 @@ void startExplosion(Explosion explosionArray[30], Missile missileArray[30])
 	{
 		j=0;
 
-		if ((missileArray[i].status==alive) && (missileArray[i].xend>=missileArray[i].x) && (missileArray[i].yend>=missileArray[i].y))
+		if ((missileArray[i].status==alive) && (missileArray[i].yend>=missileArray[i].y))
 		{
-			while (explosionArray[j].status=unused)
+			while (explosionArray[j].status==unused)
 			{
 				j++;
 			}
