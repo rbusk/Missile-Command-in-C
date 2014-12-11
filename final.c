@@ -2,6 +2,7 @@
 #include <math.h>
 #include <time.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include "gfx3.h"
 
 struct Bomb
@@ -154,9 +155,9 @@ int main()
 				setOffMissile(missileArray, c, x, y);
 			}
 
-			incrementExplosionRadius(explosionArray);
+			//incrementExplosionRadius(explosionArray);
 			incrementBomb(bombArray, nBombs);
-			incrementMissile(missileArray);
+			//incrementMissile(missileArray);
 		}
 
 		if (lose(bombArray, missileArray, cityArray))
