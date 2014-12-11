@@ -21,7 +21,6 @@ struct Bomb
 
 struct Missile
 {
-	int start; //0 through 8
 	int xstart;
 	int ystart;
 	double x;
@@ -627,8 +626,8 @@ void initializeMissiles(Missile missileArray[30], Base baseArray[3])
 			missileArray[i].baseNumber = 0;
 			missileArray[i].xend = 0;
 			missileArray[i].yend = 0;
-			missileArray[i].x = 0;
-			missileArray[i].y = 0;
+			missileArray[i].x = missileArray[i].xstart;
+			missileArray[i].y = missileArray[i].ystart;
 		}
 		if (i >= 10 && i < 20)
 		{
