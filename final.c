@@ -797,7 +797,7 @@ void drawCities(City cityArray[6])
 		x = cityArray[i].xleft;
 		y = cityArray[i].yleft;
 
-		if (cityArray[i].status = alive)
+		if (cityArray[i].status == alive)
 		{
 			gfx_fill_rectangle(x,y,50,50);
 		}
