@@ -94,10 +94,11 @@ void incrementBomb(Bomb bombArray[30], int nBombs); //done
 void incrementMissile(Missile missileArray[30]); //done
 void deployBomb(Bomb bombArray[30], int nBombs);
 void checkIfBombIsInCity(Bomb bombArray[30], City cityArray[6], int nBombs); //done
-void checkIfBombIsInBase(Bomb bombArray[30], Base baseArray[3], Missile missileArray[30], int nBombs); //done
+void checkIfBombIsInBase(Bomb bombArray[30], Base baseArray[3], Missile missileArray[30], Explosion explosionMissileArray[30], int nBombs); //done
 void removeMissiles(int n, Missile missileArray[30]); //done
 void setOffMissile(Missile missileArray[30], char c, double x, double y); //done
 void missilePath(Missile *missile); //done
+void startMissileExplosion(int x, int y, Explosion explosionMissileArray[30]);
 
 int main()
 {
@@ -110,6 +111,7 @@ int main()
 	Missile missileArray[30];
 	Bomb bombArray[30];
 	Explosion explosionArray[30];
+	Explosion explosionMissileArray[30];
 
 	char c; //use to save user's input
 	
@@ -130,6 +132,7 @@ int main()
 		initializeMissiles(missileArray, baseArray);
 		initializeBomb(bombArray,cityArray, baseArray, currentLevel);
 		initializeExplosion(explosionArray);
+		initializeExplosion(explosionMissileArray);
 		nBombs= numberOfBombs(currentLevel);
 
 		while (!win(bombArray, missileArray, cityArray) && !lose(bombArray, missileArray, cityArray))
@@ -141,6 +144,7 @@ int main()
 			drawBombs(bombArray);
 			drawMissiles(missileArray);
 			drawExplosion(explosionArray);
+			drawExplosion(explosionMissileArray);
 
 			gfx_flush();
 
@@ -173,6 +177,24 @@ int main()
 	}
 
 
+}
+
+void startMissileExplosion(int x, int y, Explosion explosionMissileArray[30])
+{
+	int i=0;
+
+	while (explosionMissileArray[i].status!=unused)
+	{
+		i++;
+	}
+
+	explosionMissileArray[i].status=alive;
+
+	explosionMissileArray[i].radius=0;
+
+	explosionMissileArray[i].x=x;
+
+	explosionMissileArray[i].y=y;
 }
 
 //calculates deltax and deltay for missile that has been set off
@@ -415,7 +437,7 @@ void removeMissiles(int n, Missile missileArray[30])
 	}
 }
 //checks if Bomb has hit a base and changes statuses of bomb and base if necessary
-void checkIfBombIsInBase(Bomb bombArray[30], Base baseArray[3], Missile missileArray[30], int nBombs)
+void checkIfBombIsInBase(Bomb bombArray[30], Base baseArray[3], Missile missileArray[30], Explosion explosionMissileArray[30], int nBombs)
 {
 	int i, n;
 
@@ -432,6 +454,7 @@ void checkIfBombIsInBase(Bomb bombArray[30], Base baseArray[3], Missile missileA
 					bombArray[i].status=dead;
 					baseArray[n/4].status=dead;
 					removeMissiles(n/4, missileArray); 
+					startMissileExplosion(baseArray[n/4].xleft+25, baseArray[n/4].yleft+25, explosionMissileArray);
 				}
 			}
 		}
