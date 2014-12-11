@@ -233,25 +233,6 @@ void startExplosion2(Explosion explosionArray2[30], Bomb bombArray[30], City cit
 		}
 	}	
 }
-/*void startMissileExplosion(double x, double y, Explosion explosionMissileArray[30])
-{
-	//printf("starting missile explosion");
-	int i=0;
-
-	//for (i=0; i<30; i++)
-	{
-		//if (explosionMissileArray[i].status==unused) break;
-	}
-	printf("%i\n", i);
-	//printf("# of new explosion: %i\n", i);
-	explosionMissileArray[i].status=alive;
-
-	explosionMissileArray[i].radius=0;
-
-	explosionMissileArray[i].x=x;
-
-	explosionMissileArray[i].y=y;
-}*/
 
 //calculates deltax and deltay for missile that has been set off
 void missilePath(Missile *missile)
