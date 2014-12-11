@@ -93,6 +93,7 @@ void incrementExplosionRadius(Explosion explosionArray[30]); //done
 void checkIfBombIsInCity(Bomb bombArray[30], City cityArray[6], int nBombs); //done
 void checkIfBombIsInBase(Bomb bombArray[30], Base baseArray[3], Missile missileArray[30], int nBombs); //done
 void removeMissiles(int n, Missile missileArray[30]); //done
+void setOffMissile(Missile missileArray[30], char c);
 
 int main()
 {
@@ -106,10 +107,13 @@ int main()
 	Bomb bombArray[30];
 	Explosion explosionArray[30];
 
+	char c; //use to save user's input
 	
 	int currentLevel,maxLevel = 5;
 	int width = 800;
 	int height = 700;
+
+	int x, y; //coordinates of mouse when an event occurs
 
 	int nExplosions=0;
 
@@ -125,16 +129,27 @@ int main()
 
 		while (!win(bombArray, missileArray, cityArray) && !lose(bombArray, missileArray, cityArray))
 		{
+			if (lose(bombArray, missileArray, cityArray))
+			{
+				break;
+			}
+
 			drawBases(baseArray,missileArray);
 			drawCities(cityArray);
 			drawBombs(bombArray);
 			drawMissiles(missileArray);
 
-		}
+			if (gfx_event_waiting())
+			{
+				c=gfx_wait();
+				x=gfx_xpos();
+				y=gfx_ypos();
+			}
 
-		if(lose(bombArray, missileArray, cityArray))
-		{
-			break;
+			if ((c=='a') || (c=='s') || (c=='d') || (c=='w'))
+			{
+				//setOffMissile(missileArray, c);
+			}
 		}
 		
 	}
