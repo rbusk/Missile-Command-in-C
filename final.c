@@ -256,7 +256,7 @@ void startExplosion2(Explosion explosionArray2[30], Bomb bombArray[30], City cit
 //calculates deltax and deltay for missile that has been set off
 void missilePath(Missile *missile)
 {
-	double speed=.7;
+	double speed=3.5;
 
 	double x, y, theta;
 
