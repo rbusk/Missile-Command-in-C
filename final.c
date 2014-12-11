@@ -140,6 +140,7 @@ int main()
 			drawCities(cityArray);
 			drawBombs(bombArray);
 			drawMissiles(missileArray);
+			drawExplosion(explosionArray);
 
 			gfx_flush();
 
@@ -158,10 +159,10 @@ int main()
 				c=' ';
 			}
 
-			incrementExplosionRadius(explosionArray);
 			//incrementBomb(bombArray, nBombs);
 			incrementMissile(missileArray);
 			startExplosion(explosionArray, missileArray);
+			incrementExplosionRadius(explosionArray);
 
 		}
 
