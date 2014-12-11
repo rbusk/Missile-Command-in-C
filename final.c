@@ -90,6 +90,9 @@ void startExplosion(Explosion explosionArray[30], Missile missileArray[30]); //d
 void initializeExplosion(Explosion explosionArray[30]); //done
 void drawExplosion(Explosion explosionArray[30]); //done
 void incrementExplosionRadius(Explosion explosionArray[30]); //done
+void incrementBomb(Bomb bombArray[30], int nBombs); //done
+void incrementMissile(Missile missileArray[30]); //done
+void deployBomb(Bomb bombArray[30], int nBombs);
 void checkIfBombIsInCity(Bomb bombArray[30], City cityArray[6], int nBombs); //done
 void checkIfBombIsInBase(Bomb bombArray[30], Base baseArray[3], Missile missileArray[30], int nBombs); //done
 void removeMissiles(int n, Missile missileArray[30]); //done
@@ -652,8 +655,8 @@ void initializeMissiles(Missile missileArray[30], Base baseArray[3])
 			missileArray[i].baseNumber = 1;
 			missileArray[i].xend = 0;
 			missileArray[i].yend = 0;
-			missileArray[i].x = 0;
-			missileArray[i].y = 0;
+			missileArray[i].x = missileArray[i].xstart;
+			missileArray[i].y = missileArray[i].ystart;
 		}
 		if (i >=20 && i < 30)
 		{
@@ -663,8 +666,8 @@ void initializeMissiles(Missile missileArray[30], Base baseArray[3])
 			missileArray[i].baseNumber = 2;
 			missileArray[i].xend = 0;
 			missileArray[i].yend = 0;
-			missileArray[i].x = 0;
-			missileArray[i].y = 0;
+			missileArray[i].x = missileArray[i].xstart;
+			missileArray[i].y = missileArray[i].ystart;
 		}
 	}
 }
@@ -697,5 +700,58 @@ void drawBombs(Bomb bombArray[30])
 	}
 
 }
+
+void incrementBomb(Bomb bombArray[30], int nBombs)
+{
+	int i;
+
+	for (i = 0; i < nBombs; i++)
+	{
+		if (bombArray[i].status == alive)
+		{
+			bombArray[i].x += bombArray[i].deltax;
+			bombArray[i].y += bombArray[i].deltay;
+		}
+	}
+}
+
+void incrementMissile(Missile missileArray[30])
+{
+	int i;
+
+	for (i = 0; i < 30; i++)
+	{
+		if (missileArray[i].status == alive)
+		{
+			missileArray[i].x -= missileArray[i].deltax;
+			missileArray[i].y -= missileArray[i].deltay;
+		}
+	}
+}
+
+void deployBomb(Bomb bombArray[30], int nBombs)
+{
+	int i;
+
+	for (i = 0; i < nBombs; i++)
+	{
+
+		if (bombArray[i].timeTilLaunch == 0)
+		{
+			bombArray[i].status = alive;
+		}
+		else
+		{
+			bombArray[i].timeTilLaunch -= 1;
+		}
+	}
+}
+
+
+
+
+
+
+
 
 
