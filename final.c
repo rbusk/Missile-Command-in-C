@@ -97,7 +97,7 @@ void checkIfBombIsInCity(Bomb bombArray[30], City cityArray[6], int nBombs); //d
 void checkIfBombIsInBase(Bomb bombArray[30], Base baseArray[3], Missile missileArray[30], int nBombs); //done
 void removeMissiles(int n, Missile missileArray[30]); //done
 void setOffMissile(Missile missileArray[30], char c, double x, double y); //done
-void missilePath(Missile missile); //done
+void missilePath(Missile *missile); //done
 
 int main()
 {
@@ -159,8 +159,10 @@ int main()
 			}
 
 			//incrementExplosionRadius(explosionArray);
-			incrementBomb(bombArray, nBombs);
+			//incrementBomb(bombArray, nBombs);
 			incrementMissile(missileArray);
+			startExplosion(explosionArray, missileArray);
+
 		}
 
 		if (lose(bombArray, missileArray, cityArray))
@@ -173,24 +175,21 @@ int main()
 }
 
 //calculates deltax and deltay for missile that has been set off
-void missilePath(Missile missile)
+void missilePath(Missile *missile)
 {
-	printf("calculating missile path\n");
 	double speed=.7;
 
 	double x, y, theta;
 
-	x=missile.xstart-missile.xend;
+	x=missile->xstart-missile->xend;
 
-	y=missile.ystart-missile.yend;
+	y=missile->ystart-missile->yend;
 
 	theta=atan(y/abs(x));
 
-	missile.deltax=cos(theta)*speed;
-	printf("%lf\n", missile.deltax);
+	missile->deltax=cos(theta)*speed;
 
-	missile.deltay=sin(theta)*speed;
-	printf("%lf\n", missile.deltay);
+	missile->deltay=sin(theta)*speed;
 }
 
 
@@ -219,7 +218,7 @@ void setOffMissile(Missile missileArray[30], char c, double x, double y)
 
 		missileArray[i].yend=y;
 
-		missilePath(missileArray[i]); //calculate deltax and deltay
+		missilePath(&missileArray[i]); //calculate deltax and deltay
 	}
 
 	else if ((c=='w') || (c=='s'))
@@ -242,7 +241,7 @@ void setOffMissile(Missile missileArray[30], char c, double x, double y)
 
 		missileArray[i].yend=y;
 
-		missilePath(missileArray[i]); //calculate deltax and deltay
+		missilePath(&missileArray[i]); //calculate deltax and deltay
 		
 	}
 
@@ -266,7 +265,7 @@ void setOffMissile(Missile missileArray[30], char c, double x, double y)
 
 		missileArray[i].yend=y;
 
-		missilePath(missileArray[i]); //calculate deltax and deltay
+		missilePath(&missileArray[i]); //calculate deltax and deltay
 	}
 }
 
@@ -750,7 +749,7 @@ void initializeMissiles(Missile missileArray[30], Base baseArray[3])
 		if (i < 10)
 		{
 			missileArray[i].xstart = baseArray[0].xleft + 25;
-			missileArray[i].ystart = baseArray[0].yleft + 25;
+			missileArray[i].ystart = baseArray[0].yleft;
 			missileArray[i].status = unused;
 			missileArray[i].baseNumber = 0;
 			missileArray[i].xend = 0;
@@ -761,7 +760,7 @@ void initializeMissiles(Missile missileArray[30], Base baseArray[3])
 		if (i >= 10 && i < 20)
 		{
 			missileArray[i].xstart = baseArray[1].xleft + 25;
-			missileArray[i].ystart = baseArray[1].yleft + 25;
+			missileArray[i].ystart = baseArray[1].yleft;
 			missileArray[i].status = unused;
 			missileArray[i].baseNumber = 1;
 			missileArray[i].xend = 0;
@@ -847,9 +846,6 @@ void incrementMissile(Missile missileArray[30])
 		}
 	}
 
-	printf("%lf\n", missileArray[0].x);
-
-	printf("%lf\n", missileArray[0].y);
 
 }
 
