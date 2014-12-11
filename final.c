@@ -207,14 +207,14 @@ void checkIfBombInsideExplosion(Bomb bombArray[30],Explosion explosionArray[30],
 
 	for(i=0; i<nBombs; i++)
 	{
-		x=bombArray[i].x;
-		y=bombArray[i].y;
+		x1=bombArray[i].x;
+		y1=bombArray[i].y;
 
 		for (j=0; j<30; j++)
 		{
 			if((bombArray[i].status==alive) && (explosionArray[j].status==alive))
 			{
-				if (explosionArray[j].radius>sqrt(x*x+y*y))
+				if (explosionArray[j].radius > sqrt((x1-explosionArray[j].x)(x1-explosionArray[j].x)+(y1-explosionArray[j].y)(y1-explosionArray[j].y)))
 				{
 					bombArray[i].status=dead;
 				}
