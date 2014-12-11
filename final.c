@@ -341,13 +341,18 @@ void incrementExplosionRadius(Explosion explosionArray[30])
 //draws explosion if explosion is alive
 void drawExplosion(Explosion explosionArray[30])
 {
-	int i;
+	int i, j;
 
 	for (i=0; i<30; i++)
 	{
 		if (explosionArray[i].status==alive)
 		{
-			gfx_circle(explosionArray[i].x, explosionArray[i].y, explosionArray[i].radius);
+			for (j=0; j<=explosionArray[i].radius; j++)
+			{
+				gfx_color(255, j*10, 1);
+
+				gfx_circle(explosionArray[i].x, explosionArray[i].y, j);
+			}
 		}
 	}
 }
@@ -703,6 +708,8 @@ int checkNumberOfBombs(Bomb bombArray[30])
 
 void drawCities(City cityArray[6])
 {
+	gfx_color(1, 255, 212);
+
 	int i, x, y;
 	for (i = 0; i < 6; i++)
 	{
@@ -711,7 +718,7 @@ void drawCities(City cityArray[6])
 
 		if (cityArray[i].status = alive)
 		{
-			gfx_rectangle(x,y,50,50);
+			gfx_fill_rectangle(x,y,50,50);
 		}
 	}
 }
@@ -735,8 +742,9 @@ void drawBases(Base baseArray[3], Missile missileArray[30])
 			}
 		}
 
-		
-		gfx_rectangle(x,y,50,50);
+		gfx_color(128, 1, 255);
+		gfx_fill_rectangle(x,y,50,50);
+		gfx_color(255, 255, 255);
 		sprintf(missileTotal,"%d",totalMissile);
 		gfx_text(x + 20, y + 20, missileTotal);
 
@@ -803,6 +811,8 @@ void drawMissiles(Missile missileArray[30])
 void drawBombs(Bomb bombArray[30])
 {
 	int i;
+
+	gfx_color(255, 255, 255);
 
 	for (i = 0; i < 30; i++)
 	{
