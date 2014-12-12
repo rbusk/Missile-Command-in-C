@@ -203,11 +203,10 @@ int main()
 			incrementBomb(bombArray, nBombs);
 			incrementExplosionRadius(explosionArray);
 			startExplosion2(explosionArray2, bombArray, cityArray, baseArray, missileArray, nBombs);
-			checkIfBombInsideExplosion(bombArray, explosionArray, nBombs);
 			score = checkIfBombInsideExplosion(bombArray, explosionArray, nBombs, score);
 			incrementMissile(missileArray);
 			startExplosion(explosionArray, missileArray);
-			//incrementExplosionRadius(explosionArray);
+			incrementExplosionRadius(explosionArray);
 			incrementExplosionRadius(explosionArray2);	
 			int i;
 		}
@@ -294,7 +293,7 @@ void startExplosion2(Explosion explosionArray2[30], Bomb bombArray[30], City cit
 //calculates deltax and deltay for missile that has been set off
 void missilePath(Missile *missile)
 {
-	double speed=3.5;
+	double speed=5;
 
 	double x, y, theta;
 
@@ -607,7 +606,7 @@ void bombSpeed(Bomb bombArray[30], int currentLevel)
 
 	double x, y, theta;
 
-	double speed=currentLevel*.01;
+	double speed=.5+currentLevel*.25;
 
 	for(i=0; i<30; i++)
 	{
