@@ -102,6 +102,8 @@ void drawScore(int score, int height, int width);
 int calculateScore(int score, Missile missileArray[30], City cityArray[6]);
 void aliveCities(City cityArray[6]);
 void findEndForBomb(Bomb bombArray[30], City cityArray[6], Base baseArray[3], int nBombs);
+void changeFontSize(int fontSize);
+void startScreen(int width, int height);
 
 int main()
 {
@@ -132,6 +134,8 @@ int main()
 	gfx_open(width,height,"MISSILE COMMAND");
 
 	aliveCities(cityArray);
+
+	startScreen(width, height);
 	
 	for (currentLevel = 1; currentLevel <= maxLevel; currentLevel++)
 	{
@@ -218,6 +222,8 @@ int main()
 		{
 			gfx_clear();
 			gfx_text(400, 300, "YOU LOSE!");
+			drawLevel(currentLevel,height, width);
+			drawScore(score, height, width);
 
 			if (gfx_wait())
 			{
@@ -229,6 +235,8 @@ int main()
 		gfx_text(400, 240, "Next Level?");
 		gfx_text(400, 270, "Press any key to Continue");
 		gfx_text(400, 300, "Press q to quit");
+		drawLevel(currentLevel,height, width);
+		drawScore(score, height, width);
 
 		c = gfx_wait();
 
@@ -1030,9 +1038,11 @@ void drawLevel(int currentLevel, int height, int width)
 
 	sprintf(level,"%d",currentLevel);
 
-	gfx_text(235, 10, level);
+	changeFontSize(20);
 
-	gfx_text(200, 10, "LEVEL");
+	gfx_text(275, 20, level);
+
+	gfx_text(200, 20, "LEVEL");
 }
 
 
@@ -1042,9 +1052,11 @@ void drawScore(int score, int height, int width)
 
 	sprintf(currentScore,"%d",score);
 
-	gfx_text(535, 10, currentScore);
+	changeFontSize(20);
 
-	gfx_text(500, 10, "SCORE");
+	gfx_text(600, 20, currentScore);
+
+	gfx_text(500, 20, "SCORE");
 }
 
 int calculateScore(int score, Missile missileArray[30], City cityArray[30])
@@ -1081,12 +1093,29 @@ void aliveCities(City cityArray[6])
 	}
 }
 
+void changeFontSize(int fontSize)
+{
+	    /*
+	     *      * Displays text with given font size
+	     *          */
+	    char fontStr[50];
+	        sprintf(fontStr, "-*-helvetica-medium-r-normal-*-%i-120-*-*-*-*-iso8859-1", fontSize);
+		    change_font(fontStr);
+}
 
+void startScreen(int width, int height)
+{
+	changeFontSize(150);
 
+	gfx_color(222,7,7);
+	gfx_text(100,200,"MISSILE");
+	gfx_text(15,350,"COMMAND");
+	gfx_color(238,222,4);
+	changeFontSize(30);
+	gfx_text(170,450,"By: Mary Connolly and Ryan Busk");
 
-
-
-
-
-
-
+	while(gfx_wait())
+	{
+		break;
+	}
+}
