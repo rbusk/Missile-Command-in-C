@@ -76,7 +76,7 @@ int checkNumberOfCities(City cityArray[6]); //done
 int win(Bomb bombArray[30],Missile missileArray[30], City cityArray[6]); //done
 int lose(Bomb bombArray[30], Missile missileArray[30], City cityArray[6]); //done
 void initializeBomb(Bomb bombArray[30], City cityArray[6], Base baseArray[3],int currentLevel); //done
-void randomizeBomb(Bomb bombArray[30]); //done
+void randomizeBomb(Bomb bombArray[30], int nBombs); //done
 void bombDestination(City cityArray[6], Base baseArray[3], Bomb bombArray[30]); //done
 void bombSpeed(Bomb bombArray[30], int currentLevel); //done
 void initializeStructures(City cityArray[6], Base baseArray[3]); //done
@@ -136,6 +136,8 @@ int main()
 		initializeExplosion(explosionArray2);
 		int i;
 		nBombs= numberOfBombs(currentLevel);
+
+		printf("%i",nBombs);
 		
 		while (!win(bombArray, missileArray, cityArray) && !lose(bombArray, missileArray, cityArray))
 		{
@@ -149,13 +151,39 @@ int main()
 			drawExplosion(explosionArray2);
 			gfx_flush();
 
+
 			usleep(10000);
 
 			if (gfx_event_waiting())
 			{
 				c=gfx_wait();
-				x=gfx_xpos();
-				y=gfx_ypos();
+
+				if (gfx_xpos() > 5 && gfx_xpos() < width - 5)
+				{
+					x = gfx_xpos();
+				}
+				else if (gfx_xpos() < 5)
+				{
+					x = 5;
+				}
+				else
+				{
+					x = width - 5;
+				}
+
+
+				if (gfx_ypos() > 30 && gfx_ypos() < (height - 70))
+				{
+					y=gfx_ypos();
+				}
+				else if (gfx_ypos() < 30)
+				{
+					y = 30;
+				}
+				else
+				{
+					y = height - 70;
+				}
 			}
 
 			if ((c=='a') || (c=='s') || (c=='d') || (c=='w'))
@@ -515,11 +543,11 @@ void initializeBomb(Bomb bombArray[30], City cityArray[6], Base baseArray[3],int
 
 	nBombs=numberOfBombs(currentLevel);
 
-	randomizeBomb(bombArray);
+	randomizeBomb(bombArray, nBombs);
 
 	for (i=0; i<nBombs; i++)
 	{
-		bombArray[i].ystart=0; //sets ystart
+		bombArray[i].ystart=30; //sets ystart
 
 		bombArray[i].status=unused; //sets status
 
@@ -556,11 +584,11 @@ void bombSpeed(Bomb bombArray[30], int currentLevel)
 }
 
 //randomizes the time each bomb is detonated and the destination of each bomb
-void randomizeBomb(Bomb bombArray[30])
+void randomizeBomb(Bomb bombArray[30], int nBombs)
 {
 	int i;
 
-	for (i=0; i<30; i++)
+	for (i=0; i<nBombs; i++)
 	{
 		bombArray[i].end= rand() % 9; //generate a number 0 through 8
 		bombArray[i].timeTilLaunch= rand() % 700; // generate a number 0 through 199
