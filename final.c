@@ -1185,17 +1185,23 @@ void changeFontSize(int fontSize)
 
 void startScreen(int width, int height)
 {
-	changeFontSize(150);
+	char c;
 
-	gfx_color(222,7,7);
-	gfx_text(100,200,"MISSILE");
-	gfx_text(15,350,"COMMAND");
-	gfx_color(238,222,4);
-	changeFontSize(30);
-	gfx_text(170,450,"By: Mary Connolly and Ryan Busk");
-
-	while (gfx_wait())
+	while(1)
 	{
-		break;
+		changeFontSize(150);
+		gfx_color(222,7,7);
+		gfx_text(100,200,"MISSILE");
+		gfx_text(15,350,"COMMAND");
+		gfx_color(238,222,4);
+		changeFontSize(30);
+		gfx_text(170,450,"By: Mary Connolly and Ryan Busk");
+
+		gfx_flush();
+		if (gfx_event_waiting())
+		{
+			c=gfx_wait();
+			break;
+		}
 	}
 }
