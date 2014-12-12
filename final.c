@@ -203,11 +203,10 @@ int main()
 			incrementBomb(bombArray, nBombs);
 			incrementExplosionRadius(explosionArray);
 			startExplosion2(explosionArray2, bombArray, cityArray, baseArray, missileArray, nBombs);
-			checkIfBombInsideExplosion(bombArray, explosionArray, nBombs);
 			score = checkIfBombInsideExplosion(bombArray, explosionArray, nBombs, score);
 			incrementMissile(missileArray);
 			startExplosion(explosionArray, missileArray);
-			//incrementExplosionRadius(explosionArray);
+			incrementExplosionRadius(explosionArray);
 			incrementExplosionRadius(explosionArray2);	
 			int i;
 		}
@@ -294,7 +293,7 @@ void startExplosion2(Explosion explosionArray2[30], Bomb bombArray[30], City cit
 //calculates deltax and deltay for missile that has been set off
 void missilePath(Missile *missile)
 {
-	double speed=3.5;
+	double speed=5;
 
 	double x, y, theta;
 
@@ -495,7 +494,7 @@ int checkIfBombInsideExplosion(Bomb bombArray[30],Explosion explosionArray[30], 
 
 			if((bombArray[i].status==alive) && (explosionArray[j].status==alive))
 			{
-				printf("i: %i bomb x, y: %lf %lf explosion x, y: %lf %lf radius: %lf)\n", i, xbomb, ybomb, xexp, yexp, explosionArray[j].radius); 
+				//printf("i: %i bomb x, y: %lf %lf explosion x, y: %lf %lf radius: %lf)\n", i, xbomb, ybomb, xexp, yexp, explosionArray[j].radius); 
 				if ((explosionArray[i].radius)>(sqrt((xbomb-xexp)*(xbomb-xexp)+(ybomb-yexp)*(ybomb-yexp))))
 				{
 					bombArray[i].status=dead;
@@ -607,7 +606,7 @@ void bombSpeed(Bomb bombArray[30], int currentLevel)
 
 	double x, y, theta;
 
-	double speed=currentLevel*.01;
+	double speed=.5+currentLevel*.25;
 
 	for(i=0; i<30; i++)
 	{
@@ -634,6 +633,8 @@ void randomizeBomb(Bomb bombArray[30], City cityArray[6], Base baseArray[3], int
 		bombArray[i].timeTilLaunch= rand() % 700; // generate a number 0 through 199
 		bombArray[i].xstart = rand() % 700 +1; // generate a number 1 to 700
 	}
+
+	bombArray[0].timeTilLaunch=0;
 }
 
 void findEndForBomb(Bomb bombArray[30], City cityArray[6], Base baseArray[3], int nBombs)
