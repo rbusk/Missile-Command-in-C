@@ -1118,7 +1118,7 @@ void drawLevel(int currentLevel, int height, int width)
 
 	sprintf(level,"%d",currentLevel);
 
-	changeFontSize(20);
+	//changeFontSize(20);
 
 	gfx_text(275, 20, level);
 
@@ -1132,7 +1132,7 @@ void drawScore(int score, int height, int width)
 
 	sprintf(currentScore,"%d",score);
 
-	changeFontSize(20);
+	//changeFontSize(20);
 
 	gfx_text(600, 20, currentScore);
 
