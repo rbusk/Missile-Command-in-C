@@ -58,7 +58,6 @@ struct Explosion
 	double x;
 	double y;
 	double radius;
-	double deltaR;
 	int status;
 } typedef Explosion;
 
@@ -166,11 +165,13 @@ int main()
 
 			deployBomb(bombArray, nBombs);
 			incrementBomb(bombArray, nBombs);
+			incrementExplosionRadius(explosionArray);
 			startExplosion2(explosionArray2, bombArray, cityArray, baseArray, missileArray, nBombs);
+
 			checkIfBombInsideExplosion(bombArray, explosionArray, nBombs);
 			incrementMissile(missileArray);
 			startExplosion(explosionArray, missileArray);
-			incrementExplosionRadius(explosionArray);
+			//incrementExplosionRadius(explosionArray);
 			incrementExplosionRadius(explosionArray2);	
 			int i;
 		}
@@ -417,7 +418,9 @@ void drawExplosion(Explosion explosionArray[30])
 //checks if Bomb is inside an explosion and, if so, changes its status to dead
 void checkIfBombInsideExplosion(Bomb bombArray[30],Explosion explosionArray[30], int nBombs) 
 {
-	int i, j, xbomb, ybomb, xexp, yexp;
+	int i, j;
+	
+	double xbomb, ybomb, xexp, yexp;
 
 	for(i=0; i<nBombs; i++)
 	{
@@ -431,7 +434,8 @@ void checkIfBombInsideExplosion(Bomb bombArray[30],Explosion explosionArray[30],
 
 			if((bombArray[i].status==alive) && (explosionArray[j].status==alive))
 			{
-				if ((explosionArray[i].radius+explosionArray[i].deltaR)>(sqrt((xbomb-xexp)*(xbomb-xexp)+(ybomb-yexp)*(ybomb-yexp))))
+				printf("i: %i bomb x, y: %lf %lf explosion x, y: %lf %lf radius: %lf)\n", i, xbomb, ybomb, xexp, yexp, explosionArray[j].radius); 
+				if ((explosionArray[i].radius)>(sqrt((xbomb-xexp)*(xbomb-xexp)+(ybomb-yexp)*(ybomb-yexp))))
 				{
 					bombArray[i].status=dead;
 				}
@@ -539,7 +543,7 @@ void bombSpeed(Bomb bombArray[30], int currentLevel)
 
 	double x, y, theta;
 
-	double speed=currentLevel*.5;
+	double speed=currentLevel*.01;
 
 	for(i=0; i<30; i++)
 	{
