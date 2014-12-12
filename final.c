@@ -89,7 +89,7 @@ void initializeMissiles(Missile missileArray[30], Base baseArray[3]);//done
 void drawCities(City cityArray[6], int currentLevel); //done
 void drawBases(Base baseArray[3], Missile missileArray[30], int currentLevel);//done
 void drawMissiles(Missile missileArray[30]);//done
-void drawBombs(Bomb bombArray[30]);//done
+void drawBombs(Bomb bombArray[30], int nBombs);//done
 int checkIfBombInsideExplosion(Bomb bombArray[30],Explosion explosionArray[30], int nBombs, int score); //done
 void startExplosion(Explosion explosionArray[30], Missile missileArray[30]); //done
 void initializeExplosion(Explosion explosionArray[29]); //done
@@ -161,7 +161,7 @@ int main()
 
 			drawBases(baseArray,missileArray, currentLevel);
 			drawCities(cityArray, currentLevel);
-			drawBombs(bombArray);
+			drawBombs(bombArray, nBombs);
 			drawMissiles(missileArray);
 			drawExplosion(explosionArray);
 			drawExplosion(explosionArray2);
@@ -565,7 +565,7 @@ int checkIfBombInsideExplosion(Bomb bombArray[30],Explosion explosionArray[30], 
 {
 	int i, j;
 	
-	double xbomb, ybomb, xexp, yexp;
+	double xbomb, ybomb, xexp, yexp, x, y;
 
 	for(i=0; i<nBombs; i++)
 	{
@@ -579,8 +579,10 @@ int checkIfBombInsideExplosion(Bomb bombArray[30],Explosion explosionArray[30], 
 
 			if((bombArray[i].status==alive) && (explosionArray[j].status==alive))
 			{
-				//printf("i: %i bomb x, y: %lf %lf explosion x, y: %lf %lf radius: %lf)\n", i, xbomb, ybomb, xexp, yexp, explosionArray[j].radius); 
-				if ((explosionArray[i].radius)>(sqrt((xbomb-xexp)*(xbomb-xexp)+(ybomb-yexp)*(ybomb-yexp))))
+				x=xbomb-xexp;
+				y=ybomb-yexp;
+
+				if ((explosionArray[j].radius)>(sqrt(pow(x, 2) + pow(y, 2))))
 				{
 					bombArray[i].status=dead;
 					score += 25;
@@ -1030,16 +1032,17 @@ void drawMissiles(Missile missileArray[30])
 	}
 }
 
-void drawBombs(Bomb bombArray[30])
+void drawBombs(Bomb bombArray[30], int nBombs)
 {
 	int i;
-
-	gfx_color(255, 255, 255);
-
-	for (i = 0; i < 30; i++)
+	
+	for (i = 0; i < nBombs; i++)
 	{
 		if (bombArray[i].status == alive)
 		{
+			if (i==1) gfx_color(0, 0, 255);
+			else gfx_color(255, 255, 255);		
+
 			gfx_line(bombArray[i].xstart,bombArray[i].ystart,bombArray[i].x,bombArray[i].y);
 
 		}
