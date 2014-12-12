@@ -494,7 +494,7 @@ int checkIfBombInsideExplosion(Bomb bombArray[30],Explosion explosionArray[30], 
 
 			if((bombArray[i].status==alive) && (explosionArray[j].status==alive))
 			{
-				printf("i: %i bomb x, y: %lf %lf explosion x, y: %lf %lf radius: %lf)\n", i, xbomb, ybomb, xexp, yexp, explosionArray[j].radius); 
+				//printf("i: %i bomb x, y: %lf %lf explosion x, y: %lf %lf radius: %lf)\n", i, xbomb, ybomb, xexp, yexp, explosionArray[j].radius); 
 				if ((explosionArray[i].radius)>(sqrt((xbomb-xexp)*(xbomb-xexp)+(ybomb-yexp)*(ybomb-yexp))))
 				{
 					bombArray[i].status=dead;
@@ -633,6 +633,8 @@ void randomizeBomb(Bomb bombArray[30], City cityArray[6], Base baseArray[3], int
 		bombArray[i].timeTilLaunch= rand() % 700; // generate a number 0 through 199
 		bombArray[i].xstart = rand() % 700 +1; // generate a number 1 to 700
 	}
+
+	bombArray[0].timeTilLaunch=0;
 }
 
 void findEndForBomb(Bomb bombArray[30], City cityArray[6], Base baseArray[3], int nBombs)
