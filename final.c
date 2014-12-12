@@ -76,7 +76,7 @@ int checkNumberOfCities(City cityArray[6]); //done
 int win(Bomb bombArray[30],Missile missileArray[30], City cityArray[6], int nBombs); //done
 int lose(Bomb bombArray[30], Missile missileArray[30], City cityArray[6], int nBombs); //done
 void initializeBomb(Bomb bombArray[30], City cityArray[6], Base baseArray[3],int currentLevel); //done
-void randomizeBomb(Bomb bombArray[30], int nBombs); //done
+void randomizeBomb(Bomb bombArray[30], City cityArray[6], Base baseArray[3], int nBombs); //done
 void bombDestination(City cityArray[6], Base baseArray[3], Bomb bombArray[30]); //done
 void bombSpeed(Bomb bombArray[30], int currentLevel); //done
 void initializeStructures(City cityArray[6], Base baseArray[3]); //done
@@ -102,6 +102,7 @@ void drawLevel(int currentLevel, int height, int width);
 void drawScore(int score, int height, int width);
 int calculateScore(int score, Missile missileArray[30], City cityArray[6]);
 void aliveCities(City cityArray[6]);
+void findEndForBomb(Bomb bombArray[30], City cityArray[6], Base baseArray[3], int nBombs);
 
 int main()
 {
@@ -578,7 +579,7 @@ void initializeBomb(Bomb bombArray[30], City cityArray[6], Base baseArray[3],int
 
 	nBombs=numberOfBombs(currentLevel);
 
-	randomizeBomb(bombArray, nBombs);
+	randomizeBomb(bombArray, cityArray, baseArray, nBombs);
 
 	for (i=0; i<nBombs; i++)
 	{
@@ -619,15 +620,53 @@ void bombSpeed(Bomb bombArray[30], int currentLevel)
 }
 
 //randomizes the time each bomb is detonated and the destination of each bomb
-void randomizeBomb(Bomb bombArray[30], int nBombs)
+void randomizeBomb(Bomb bombArray[30], City cityArray[6], Base baseArray[3], int nBombs)
 {
 	int i;
 
 	for (i=0; i<nBombs; i++)
 	{
-		bombArray[i].end= rand() % 9; //generate a number 0 through 8
+		findEndForBomb(bombArray, cityArray, baseArray, nBombs);
 		bombArray[i].timeTilLaunch= rand() % 700; // generate a number 0 through 199
 		bombArray[i].xstart = rand() % 700 +1; // generate a number 1 to 700
+	}
+}
+
+void findEndForBomb(Bomb bombArray[30], City cityArray[6], Base baseArray[3], int nBombs)
+{
+	int numberArray[9], numberOfAlive, i, destination;
+
+	for (i = 0; i < 6; i++)
+	{
+		if (cityArray[i].status == alive)
+		{
+			if (i >= 0 && i < 3)
+			{
+				numberArray[numberOfAlive] = i + 1;
+				numberOfAlive++;
+			}
+			if (i > 2 && i <= 5)
+			{
+				numberArray[numberOfAlive] = i + 2;
+				numberOfAlive++;
+			}
+		}
+	}
+
+	for (i = 0; i < 3; i++)
+	{
+		if (baseArray[i].status == alive)
+		{
+			numberArray[numberOfAlive] = i * 4;
+			numberOfAlive++;
+		}
+	}
+
+	for (i = 0; i < nBombs; i++)
+	{
+		destination = rand() % numberOfAlive;
+
+		bombArray[i].end = numberArray[destination];
 	}
 }
 
