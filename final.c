@@ -126,7 +126,7 @@ int main()
 	Explosion explosionMissileArray[30];
 	Explosion explosionArray2[30];
 
-	char c; //use to save user's input
+	char c, c2; //use to save user's input
 	
 	int currentLevel,maxLevel = 5;
 	int width = 800;
@@ -245,9 +245,9 @@ int main()
 		drawLevel(currentLevel,height, width);
 		drawScore(score, height, width);
 
-		c = gfx_wait();
+		c2 = gfx_wait();
 
-		if (c == 'q')
+		if (c2 == 'q')
 		{
 			break;
 		}
