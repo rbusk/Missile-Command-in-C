@@ -126,7 +126,7 @@ int main()
 	Explosion explosionMissileArray[30];
 	Explosion explosionArray2[30];
 
-	char c; //use to save user's input
+	char c, c2; //use to save user's input
 	
 	int currentLevel,maxLevel = 5;
 	int width = 800;
@@ -245,9 +245,9 @@ int main()
 		drawLevel(currentLevel,height, width);
 		drawScore(score, height, width);
 
-		c = gfx_wait();
+		c2 = gfx_wait();
 
-		if (c == 'q')
+		if (c2 == 'q')
 		{
 			break;
 		}
@@ -277,12 +277,13 @@ void setColor(int currentLevel, int structure)
 	{
 		if (structure==city)
 		{
-			gfx_color(255, 154, 0);
+			gfx_color(255, 0, 0);
 		}
 
 		if (structure==base)
 		{
-			gfx_color(138, 0, 208); }
+			gfx_color(0, 196, 255); 
+		}
 
 	}
 
@@ -295,7 +296,7 @@ void setColor(int currentLevel, int structure)
 
 		if (structure==base)
 		{
-			gfx_color(247, 255, 0);
+			gfx_color(255, 162, 0);
 		}
 	}
 
@@ -317,7 +318,7 @@ void setColor(int currentLevel, int structure)
 	{
 		if (structure==city)
 		{
-			gfx_color(253, 0, 118);
+			gfx_color(212, 4, 177);
 		}
 
 		if (structure==base)
@@ -1036,13 +1037,12 @@ void drawBombs(Bomb bombArray[30], int nBombs)
 {
 	int i;
 	
+	gfx_color(255, 255, 255);
+
 	for (i = 0; i < nBombs; i++)
 	{
 		if (bombArray[i].status == alive)
 		{
-			if (i==1) gfx_color(0, 0, 255);
-			else gfx_color(255, 255, 255);		
-
 			gfx_line(bombArray[i].xstart,bombArray[i].ystart,bombArray[i].x,bombArray[i].y);
 
 		}
@@ -1185,17 +1185,23 @@ void changeFontSize(int fontSize)
 
 void startScreen(int width, int height)
 {
-	changeFontSize(150);
+	char c;
 
-	gfx_color(222,7,7);
-	gfx_text(100,200,"MISSILE");
-	gfx_text(15,350,"COMMAND");
-	gfx_color(238,222,4);
-	changeFontSize(30);
-	gfx_text(170,450,"By: Mary Connolly and Ryan Busk");
-
-	while(gfx_wait())
+	while(1)
 	{
-		break;
+		changeFontSize(150);
+		gfx_color(222,7,7);
+		gfx_text(100,200,"MISSILE");
+		gfx_text(15,350,"COMMAND");
+		gfx_color(238,222,4);
+		changeFontSize(30);
+		gfx_text(170,450,"By: Mary Connolly and Ryan Busk");
+
+		gfx_flush();
+		if (gfx_event_waiting())
+		{
+			c=gfx_wait();
+			break;
+		}
 	}
 }
