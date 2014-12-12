@@ -111,6 +111,7 @@ void findEndForBomb(Bomb bombArray[30], City cityArray[6], Base baseArray[3], in
 void changeFontSize(int fontSize);
 void startScreen(int width, int height);
 void setColor(int currentLevel, int);
+void instructionScreen(void);
 
 int main()
 {
@@ -143,6 +144,8 @@ int main()
 	aliveCities(cityArray);
 
 	startScreen(width, height);
+
+	instructionScreen();
 	
 	for (currentLevel = 1; currentLevel <= maxLevel; currentLevel++)
 	{
@@ -1187,6 +1190,8 @@ void startScreen(int width, int height)
 {
 	char c;
 
+	gfx_clear();
+
 	while(1)
 	{
 		changeFontSize(150);
@@ -1204,4 +1209,32 @@ void startScreen(int width, int height)
 			break;
 		}
 	}
+}
+
+void instructionScreen(void)
+{
+	char c;
+
+	gfx_clear();
+
+	while (1)
+	{
+		changeFontSize(15);
+		gfx_color(0, 0, 255);
+		gfx_text(50, 100, "Welcome to Missile Command.");
+		gfx_color(0, 94, 255);
+		gfx_text(50, 150, "Press 'a' to fire from your left base, 'w' or 's' from your middle base, and 'd' from your right base.");
+		gfx_color(41, 177, 255);
+		gfx_text(50, 200, "To win, at least one city must be standing at the end of all 5 levels.");
+		gfx_color(41, 249, 255);
+		gfx_text(50, 250, "Press any key to start.");
+		gfx_flush();
+
+		if (gfx_event_waiting())
+		{
+			c=gfx_wait();
+			break;
+		}
+	}
+	
 }
