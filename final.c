@@ -228,7 +228,22 @@ int main()
 		if (lose(bombArray, missileArray, cityArray, nBombs))
 		{
 			gfx_clear();
-			gfx_text(400, 300, "YOU LOSE!");
+			changeFontSize(100);
+			gfx_text(170, 300, "YOU LOSE!");
+			drawLevel(currentLevel,height, width);
+			drawScore(score, height, width);
+
+			if (gfx_wait())
+			{
+				break;
+			}
+		}
+
+		if (win(bombArray, missileArray, cityArray, nBombs) && currentLevel == 5)
+		{
+			gfx_clear();
+			changeFontSize(100);
+			gfx_text(170, 300, "YOU WIN!");
 			drawLevel(currentLevel,height, width);
 			drawScore(score, height, width);
 
@@ -727,7 +742,7 @@ void randomizeBomb(Bomb bombArray[30], City cityArray[6], Base baseArray[3], int
 
 void findEndForBomb(Bomb bombArray[30], City cityArray[6], Base baseArray[3], int nBombs)
 {
-	int numberArray[9], numberOfAlive, i, destination;
+	int numberArray[9], numberOfAlive = 0, i, destination;
 
 	for (i = 0; i < 6; i++)
 	{
@@ -1118,7 +1133,7 @@ void drawLevel(int currentLevel, int height, int width)
 
 	sprintf(level,"%d",currentLevel);
 
-	//changeFontSize(20);
+	changeFontSize(20);
 
 	gfx_text(275, 20, level);
 
@@ -1132,7 +1147,7 @@ void drawScore(int score, int height, int width)
 
 	sprintf(currentScore,"%d",score);
 
-	//changeFontSize(20);
+	changeFontSize(20);
 
 	gfx_text(600, 20, currentScore);
 
