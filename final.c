@@ -70,11 +70,11 @@ enum STATUS
 };
 
 int numberOfBombs(int currentLevel);//done
-int checkNumberOfBombs(Bomb bombArray[30]); //done
+int checkNumberOfBombs(Bomb bombArray[30], int bombs); //done
 int checkNumberOfMissiles(Missile missileArray[30]); //done
 int checkNumberOfCities(City cityArray[6]); //done
-int win(Bomb bombArray[30],Missile missileArray[30], City cityArray[6]); //done
-int lose(Bomb bombArray[30], Missile missileArray[30], City cityArray[6]); //done
+int win(Bomb bombArray[30],Missile missileArray[30], City cityArray[6], int nBombs); //done
+int lose(Bomb bombArray[30], Missile missileArray[30], City cityArray[6], int nBombs); //done
 void initializeBomb(Bomb bombArray[30], City cityArray[6], Base baseArray[3],int currentLevel); //done
 void randomizeBomb(Bomb bombArray[30], int nBombs); //done
 void bombDestination(City cityArray[6], Base baseArray[3], Bomb bombArray[30]); //done
@@ -85,7 +85,7 @@ void drawCities(City cityArray[6]); //done
 void drawBases(Base baseArray[3], Missile missileArray[30]);//done
 void drawMissiles(Missile missileArray[30]);//done
 void drawBombs(Bomb bombArray[30]);//done
-void checkIfBombInsideExplosion(Bomb bombArray[30],Explosion explosionArray[30], int nBombs); //done
+int checkIfBombInsideExplosion(Bomb bombArray[30],Explosion explosionArray[30], int nBombs, int score); //done
 void startExplosion(Explosion explosionArray[30], Missile missileArray[30]); //done
 void initializeExplosion(Explosion explosionArray[29]); //done
 void drawExplosion(Explosion explosionArray[30]); //done
@@ -98,6 +98,10 @@ void setOffMissile(Missile missileArray[30], char c, double x, double y); //done
 void missilePath(Missile *missile); //done
 void startMissileExplosion(double x, double y, Explosion explosionMissileArray[30]);
 void startExplosion2(Explosion explosionArray2[30], Bomb bombArray[30], City cityArray[6], Base baseArray[3], Missile missileArray[30], int nBombs);
+void drawLevel(int currentLevel, int height, int width);
+void drawScore(int score, int height, int width);
+int calculateScore(int score, Missile missileArray[30], City cityArray[6]);
+void aliveCities(City cityArray[6]);
 
 int main()
 {
@@ -119,12 +123,15 @@ int main()
 	int width = 800;
 	int height = 700;
 	int j;
+	int score = 0;
 
 	double x, y; //coordinates of mouse when an event occurs
 
 	int nExplosions=0, nBombs;
 
 	gfx_open(width,height,"MISSILE COMMAND");
+
+	aliveCities(cityArray);
 	
 	for (currentLevel = 1; currentLevel <= maxLevel; currentLevel++)
 	{
@@ -136,10 +143,8 @@ int main()
 		initializeExplosion(explosionArray2);
 		int i;
 		nBombs= numberOfBombs(currentLevel);
-
-		printf("%i",nBombs);
-		
-		while (!win(bombArray, missileArray, cityArray) && !lose(bombArray, missileArray, cityArray))
+	
+		while (!win(bombArray, missileArray, cityArray, nBombs) && !lose(bombArray, missileArray, cityArray, nBombs))
 		{
 			gfx_clear();
 
@@ -149,6 +154,8 @@ int main()
 			drawMissiles(missileArray);
 			drawExplosion(explosionArray);
 			drawExplosion(explosionArray2);
+			drawLevel(currentLevel,height, width);
+			drawScore(score, height, width);
 			gfx_flush();
 
 
@@ -195,7 +202,7 @@ int main()
 			deployBomb(bombArray, nBombs);
 			incrementBomb(bombArray, nBombs);
 			startExplosion2(explosionArray2, bombArray, cityArray, baseArray, missileArray, nBombs);
-			checkIfBombInsideExplosion(bombArray, explosionArray, nBombs);
+			score = checkIfBombInsideExplosion(bombArray, explosionArray, nBombs, score);
 			incrementMissile(missileArray);
 			startExplosion(explosionArray, missileArray);
 			incrementExplosionRadius(explosionArray);
@@ -203,10 +210,32 @@ int main()
 			int i;
 		}
 
-		if (lose(bombArray, missileArray, cityArray))
+		score = calculateScore(score, missileArray, cityArray);
+		drawScore(score, height, width);
+
+		if (lose(bombArray, missileArray, cityArray, nBombs))
+		{
+			gfx_clear();
+			gfx_text(400, 300, "YOU LOSE!");
+
+			if (gfx_wait())
+			{
+				break;
+			}
+		}
+
+		gfx_clear();
+		gfx_text(400, 240, "Next Level?");
+		gfx_text(400, 270, "Press any key to Continue");
+		gfx_text(400, 300, "Press q to quit");
+
+		c = gfx_wait();
+
+		if (c == 'q')
 		{
 			break;
 		}
+
 	}
 
 
@@ -391,8 +420,11 @@ void startExplosion(Explosion explosionArray[30], Missile missileArray[30])
 			explosionArray[j].y=missileArray[i].yend;
 
 			explosionArray[j].radius=0;
+
 		}
 	}
+
+	
 
 }
 
@@ -443,7 +475,7 @@ void drawExplosion(Explosion explosionArray[30])
 }
 
 //checks if Bomb is inside an explosion and, if so, changes its status to dead
-void checkIfBombInsideExplosion(Bomb bombArray[30],Explosion explosionArray[30], int nBombs) 
+int checkIfBombInsideExplosion(Bomb bombArray[30],Explosion explosionArray[30], int nBombs, int score) 
 {
 	int i, j, xbomb, ybomb, xexp, yexp;
 
@@ -462,11 +494,14 @@ void checkIfBombInsideExplosion(Bomb bombArray[30],Explosion explosionArray[30],
 				if ((explosionArray[i].radius+explosionArray[i].deltaR)>(sqrt((xbomb-xexp)*(xbomb-xexp)+(ybomb-yexp)*(ybomb-yexp))))
 				{
 					bombArray[i].status=dead;
+					score += 25;
 				}
 
 			}
 		}
 	}
+
+	return score;
 }
 
 //removes missiles from a base that has been destroyed
@@ -628,14 +663,12 @@ void initializeStructures(City cityArray[6], Base baseArray[3])
 		{
 			cityArray[i-1].xleft=35+85*i;
 			cityArray[i-1].yleft=y;
-			cityArray[i-1].status = alive;
 		}
 
 		if ((i>=5) && (i<=7))
 		{
 			cityArray[i-2].xleft=35+85*i;
 			cityArray[i-2].yleft=y;
-			cityArray[i-2].status = alive;
 		}
 
 
@@ -683,11 +716,11 @@ int numberOfBombs(int currentLevel)
 	return nBombs;
 }
 
-int lose(Bomb bombArray[30], Missile missileArray[30], City cityArray[6])
+int lose(Bomb bombArray[30], Missile missileArray[30], City cityArray[6], int bombs)
 {
 	int totalBombs, totalCities;
 
-	totalBombs = checkNumberOfBombs(bombArray);
+	totalBombs = checkNumberOfBombs(bombArray, bombs);
 
 	totalCities = checkNumberOfCities(cityArray);
 
@@ -702,11 +735,11 @@ int lose(Bomb bombArray[30], Missile missileArray[30], City cityArray[6])
 }
 
 //returns 1 if win and 0 otherwise
-int win(Bomb bombArray[30], Missile missileArray[30], City cityArray[6])
+int win(Bomb bombArray[30], Missile missileArray[30], City cityArray[6], int bombs)
 {
 	int nBombs, nCities; //number of bombs, number of cities
 
-	nBombs=checkNumberOfBombs(bombArray);
+	nBombs=checkNumberOfBombs(bombArray, bombs);
 
 	nCities=checkNumberOfCities(cityArray);
 
@@ -751,13 +784,13 @@ int checkNumberOfCities(City cityArray[6])
 	return totalAlive;
 }
 //returns number of alive bombs
-int checkNumberOfBombs(Bomb bombArray[30])
+int checkNumberOfBombs(Bomb bombArray[30], int bombs)
 {
-	int i, nBombs; //counter, number of bombs
+	int i, nBombs = 0; //counter, number of bombs
 
-	for (i=0; i<30; i++)
+	for (i=0; i< bombs; i++)
 	{
-		if (bombArray[i].status==alive)
+		if (bombArray[i].status != dead)
 		{
 			nBombs++;
 		}
@@ -946,6 +979,64 @@ void deployBomb(Bomb bombArray[30], int nBombs)
 		bombArray[i].timeTilLaunch -= 1;
 	}
 }
+
+void drawLevel(int currentLevel, int height, int width)
+{
+	char level[2];
+
+	sprintf(level,"%d",currentLevel);
+
+	gfx_text(235, 10, level);
+
+	gfx_text(200, 10, "LEVEL");
+}
+
+
+void drawScore(int score, int height, int width)
+{
+	char currentScore[10000];
+
+	sprintf(currentScore,"%d",score);
+
+	gfx_text(535, 10, currentScore);
+
+	gfx_text(500, 10, "SCORE");
+}
+
+int calculateScore(int score, Missile missileArray[30], City cityArray[30])
+{
+	int i;
+
+	for (i = 0; i < 6; i++)
+	{
+		if (cityArray[i].status == alive)
+		{
+			score += 100;
+		}
+	}
+	
+	for (i = 0; i < 30; i++)
+	{
+		if (missileArray[i].status == alive)
+		{
+			score += 5;
+		}
+	}
+
+	return score;
+
+}
+		
+void aliveCities(City cityArray[6])
+{
+	int i;
+
+	for (i = 0; i < 6; i++)
+	{
+		cityArray[i].status = alive;
+	}
+}
+
 
 
 
