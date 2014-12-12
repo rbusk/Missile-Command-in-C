@@ -68,6 +68,12 @@ enum STATUS
 	unused
 };
 
+enum SRUCTURE
+{
+	base,
+	city
+};
+
 int numberOfBombs(int currentLevel);//done
 int checkNumberOfBombs(Bomb bombArray[30], int bombs); //done
 int checkNumberOfMissiles(Missile missileArray[30]); //done
@@ -80,8 +86,8 @@ void bombDestination(City cityArray[6], Base baseArray[3], Bomb bombArray[30]); 
 void bombSpeed(Bomb bombArray[30], int currentLevel); //done
 void initializeStructures(City cityArray[6], Base baseArray[3]); //done
 void initializeMissiles(Missile missileArray[30], Base baseArray[3]);//done
-void drawCities(City cityArray[6]); //done
-void drawBases(Base baseArray[3], Missile missileArray[30]);//done
+void drawCities(City cityArray[6], int currentLevel); //done
+void drawBases(Base baseArray[3], Missile missileArray[30], int currentLevel);//done
 void drawMissiles(Missile missileArray[30]);//done
 void drawBombs(Bomb bombArray[30]);//done
 int checkIfBombInsideExplosion(Bomb bombArray[30],Explosion explosionArray[30], int nBombs, int score); //done
@@ -104,6 +110,7 @@ void aliveCities(City cityArray[6]);
 void findEndForBomb(Bomb bombArray[30], City cityArray[6], Base baseArray[3], int nBombs);
 void changeFontSize(int fontSize);
 void startScreen(int width, int height);
+void setColor(int currentLevel, int);
 
 int main()
 {
@@ -152,8 +159,8 @@ int main()
 		{
 			gfx_clear();
 
-			drawBases(baseArray,missileArray);
-			drawCities(cityArray);
+			drawBases(baseArray,missileArray, currentLevel);
+			drawCities(cityArray, currentLevel);
 			drawBombs(bombArray);
 			drawMissiles(missileArray);
 			drawExplosion(explosionArray);
@@ -248,6 +255,76 @@ int main()
 	}
 
 
+}
+//sets color of bases and cities
+void setColor(int currentLevel, int structure)
+{
+	if (currentLevel==1)
+	{
+		if (structure==city)
+		{
+			gfx_color(0, 253, 194);
+		}
+
+		if (structure==base)
+		{
+			gfx_color(0, 9, 255);
+		}
+
+	}
+
+	if (currentLevel==2)
+	{
+		if (structure==city)
+		{
+			gfx_color(255, 154, 0);
+		}
+
+		if (structure==base)
+		{
+			gfx_color(138, 0, 208); }
+
+	}
+
+	if (currentLevel==3)
+	{
+		if (structure==city)
+		{
+			gfx_color(0, 179, 255);
+		}
+
+		if (structure==base)
+		{
+			gfx_color(247, 255, 0);
+		}
+	}
+
+	if (currentLevel==4)
+	{
+		if (structure==city)
+		{
+			gfx_color(1, 255, 212);
+		}
+
+		if (structure==base)
+		{
+			gfx_color(128, 1, 255);
+		}
+
+	}
+
+	if (currentLevel==5)
+	{
+		if (structure==city)
+		{
+			gfx_color(253, 0, 118);
+		}
+
+		if (structure==base)
+		{
+			gfx_color(8, 253, 194);
+		}
+	}
 }
 
 void startExplosion2(Explosion explosionArray2[30], Bomb bombArray[30], City cityArray[6], Base baseArray[3], Missile missileArray[30], int nBombs)
@@ -851,9 +928,9 @@ int checkNumberOfBombs(Bomb bombArray[30], int bombs)
 	return nBombs;
 }
 
-void drawCities(City cityArray[6])
+void drawCities(City cityArray[6], int currentLevel)
 {
-	gfx_color(1, 255, 212);
+	setColor(currentLevel, city);
 
 	int i, x, y;
 	for (i = 0; i < 6; i++)
@@ -869,7 +946,7 @@ void drawCities(City cityArray[6])
 }
 
 
-void drawBases(Base baseArray[3], Missile missileArray[30])
+void drawBases(Base baseArray[3], Missile missileArray[30], int currentLevel)
 {
 	int i, j, x, y, totalMissile = 0;
 	char missileTotal[3];
@@ -887,7 +964,7 @@ void drawBases(Base baseArray[3], Missile missileArray[30])
 			}
 		}
 
-		gfx_color(128, 1, 255);
+		setColor(currentLevel, base);
 		gfx_fill_rectangle(x,y,50,50);
 		gfx_color(255, 255, 255);
 		sprintf(missileTotal,"%d",totalMissile);
