@@ -259,3 +259,10 @@ void gfx_triangle( int x1, int y1, int x2, int y2, int x3, int y3 )
 	gfx_line(x3,y3,x1,y1);
 }
 
+void change_font(char *font_str)
+{
+	Font font;
+	font = XLoadFont(gfx_display,font_str);
+	XSetFont(gfx_display, gfx_gc,font);
+}
+
