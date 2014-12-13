@@ -1,3 +1,5 @@
+//By Ryan Busk and Mary Connolly
+
 #include <stdio.h>
 #include <math.h>
 #include <time.h>
