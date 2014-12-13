@@ -222,7 +222,6 @@ int main()
 			incrementMissile(missileArray);
 			startExplosion(explosionArray, missileArray);
 			incrementExplosionRadius(explosionArray2);	
-			int i;
 		}
 
 		score = calculateScore(score, missileArray, cityArray);
