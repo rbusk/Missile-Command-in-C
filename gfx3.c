@@ -1,3 +1,5 @@
+//By Ryan Busk and Mary Connolly
+
 #include <X11/Xlib.h>
 #include <unistd.h>
 #include <stdio.h>
