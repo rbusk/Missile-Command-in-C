@@ -1,3 +1,5 @@
+//By Ryan Busk and Mary Connolly
+
 /*
 A simple graphics library for CSE 20211 
 Originally created by Prof. Doug Thain.
