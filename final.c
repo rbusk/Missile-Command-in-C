@@ -126,7 +126,6 @@ int main()
 	Missile missileArray[30];
 	Bomb bombArray[30];
 	Explosion explosionArray[30];
-	Explosion explosionMissileArray[30];
 	Explosion explosionArray2[30];
 
 	char c, c2; //use to save user's input
@@ -222,7 +221,6 @@ int main()
 			score = checkIfBombInsideExplosion(bombArray, explosionArray, nBombs, score);
 			incrementMissile(missileArray);
 			startExplosion(explosionArray, missileArray);
-			incrementExplosionRadius(explosionArray);
 			incrementExplosionRadius(explosionArray2);	
 			int i;
 		}
