@@ -9,31 +9,31 @@
 
 struct Bomb
 {
-	double xstart;
-	double ystart;
-	double deltax;
+	double xstart; // 0 through 800
+	double ystart; // 0
+	double deltax; 
 	double deltay;
 	double end; //0 through 8
 	double xend;
 	double yend;
 	double x;
 	double y;
-	int status;
-	int timeTilLaunch;
+	int status; // dead, alive, unused
+	int timeTilLaunch; // countdown until bomb drops
 } typedef Bomb;
 
 struct Missile
 {
-	double xstart;
-	double ystart;
+	double xstart; // one of the bases
+	double ystart; 
 	double x;
 	double y;
 	double xend;
 	double yend;
 	double deltax;
 	double deltay;
-	int status;
-	int baseNumber;
+	int status; // dead, alive, unused
+	int baseNumber; // 0 to 2
 } typedef Missile;
 
 struct City
@@ -42,7 +42,7 @@ struct City
 	double yleft;
 	int width;
 	int height;
-	int status;
+	int status; // dead, alive
 } typedef City;
 
 struct Base
@@ -51,8 +51,8 @@ struct Base
 	double yleft;
 	int width;
 	int height;
-	int missileNumber;
-	int status;
+	int missileNumber; // number of missiles 0 - 10
+	int status; // dead, alive
 } typedef Base;
 
 struct Explosion
@@ -60,7 +60,7 @@ struct Explosion
 	double x;
 	double y;
 	double radius;
-	int status;
+	int status; // dead or alive
 } typedef Explosion;
 
 enum STATUS
@@ -70,7 +70,7 @@ enum STATUS
 	unused
 };
 
-enum SRUCTURE
+enum STRUCTURE
 {
 	base,
 	city
@@ -119,66 +119,68 @@ int main()
 {
 	time_t t;
 
-	srand(time(&t));
+	srand(time(&t)); // seed rand in time
 
-	Base baseArray[3];
-	City cityArray[6];
-	Missile missileArray[30];
-	Bomb bombArray[30];
-	Explosion explosionArray[30];
+	Base baseArray[3]; // allocate bases
+	City cityArray[6]; // allocate structures
+	Missile missileArray[30]; // allocate missiles
+	Bomb bombArray[30]; // allocate bombs
+	Explosion explosionArray[30]; // allocate explosions
 	Explosion explosionArray2[30];
 
 	char c, c2; //use to save user's input
 	
-	int currentLevel,maxLevel = 5;
+	int currentLevel,maxLevel = 5; // total numbe rof levels
 	int width = 800;
 	int height = 700;
 	int j;
-	int score = 0;
+	int score = 0; // score of game
+	int i;
 
 	double x, y; //coordinates of mouse when an event occurs
 
 	int nExplosions=0, nBombs;
 
-	gfx_open(width,height,"MISSILE COMMAND");
+	gfx_open(width,height,"MISSILE COMMAND"); // open window
 
-	aliveCities(cityArray);
+	aliveCities(cityArray); // set cities to alive
 
-	startScreen(width, height);
+	startScreen(width, height); // run the start screen
 
-	instructionScreen();
+	instructionScreen(); // run the instructions screen
 	
-	for (currentLevel = 1; currentLevel <= maxLevel; currentLevel++)
+	for (currentLevel = 1; currentLevel <= maxLevel; currentLevel++) // run through each level
 	{
 		
-		initializeStructures(cityArray,baseArray); //done
-		initializeMissiles(missileArray, baseArray);
-		initializeBomb(bombArray,cityArray, baseArray, currentLevel);
-		initializeExplosion(explosionArray);
+		initializeStructures(cityArray,baseArray); // initialize the bases and missiles
+		initializeMissiles(missileArray, baseArray); // initialize missiles
+		initializeBomb(bombArray,cityArray, baseArray, currentLevel); // initialize bombs
+		initializeExplosion(explosionArray); // initiliaze explosions
 		initializeExplosion(explosionArray2);
-		int i;
-		nBombs= numberOfBombs(currentLevel);
+		nBombs= numberOfBombs(currentLevel); // find number of bombs
 	
-		while (!win(bombArray, missileArray, cityArray, nBombs) && !lose(bombArray, missileArray, cityArray, nBombs))
+		while (!win(bombArray, missileArray, cityArray, nBombs) && !lose(bombArray, missileArray, cityArray, nBombs)) // check if usr won level or lost game
 		{
-			gfx_clear();
+			gfx_clear(); // clear screen
 
-			drawBases(baseArray,missileArray, currentLevel);
-			drawCities(cityArray, currentLevel);
-			drawBombs(bombArray, nBombs);
-			drawMissiles(missileArray);
-			drawExplosion(explosionArray);
+			drawBases(baseArray,missileArray, currentLevel); // draw alive bases
+			drawCities(cityArray, currentLevel); // draw alive cities
+			drawBombs(bombArray, nBombs); // draw deployed bombs
+			drawMissiles(missileArray); // draw shot missiles
+			drawExplosion(explosionArray); // draw explosions
 			drawExplosion(explosionArray2);
-			drawLevel(currentLevel,height, width);
-			drawScore(score, height, width);
+			drawLevel(currentLevel,height, width); // draw level on top of screen
+			drawScore(score, height, width); // draw score on top of screen
 			gfx_flush();
 
 
 			usleep(10000);
 
-			if (gfx_event_waiting())
+			if (gfx_event_waiting()) // check if user is pushing button
 			{
-				c=gfx_wait();
+				c=gfx_wait(); 
+
+				// check if mouse is inside score screen
 
 				if (gfx_xpos() > 5 && gfx_xpos() < width - 5)
 				{
@@ -208,27 +210,28 @@ int main()
 				}
 			}
 
-			if ((c=='a') || (c=='s') || (c=='d') || (c=='w'))
+			if ((c=='a') || (c=='s') || (c=='d') || (c=='w')) // depending on button pressed, shoot missile from different base
 			{
 				setOffMissile(missileArray, c, x, y);
 				c=' ';
 			}
 
-			deployBomb(bombArray, nBombs);
-			incrementBomb(bombArray, nBombs);
-			incrementExplosionRadius(explosionArray);
+			deployBomb(bombArray, nBombs); // drop bombs whose counter is zero and are set to alive
+			incrementBomb(bombArray, nBombs); // decrease bomb counter by one, or move bomb by deltax and deltay
+			incrementExplosionRadius(explosionArray); // make any current explosion bigger
 			startExplosion2(explosionArray2, bombArray, cityArray, baseArray, missileArray, nBombs);
-			score = checkIfBombInsideExplosion(bombArray, explosionArray, nBombs, score);
-			incrementMissile(missileArray);
-			startExplosion(explosionArray, missileArray);
-			incrementExplosionRadius(explosionArray2);	
+			score = checkIfBombInsideExplosion(bombArray, explosionArray, nBombs, score); // check if any bombs have been blown up by missiles
+			incrementMissile(missileArray); // move missile by deltax and deltay
+			startExplosion(explosionArray, missileArray); // if missile hits target, start explosion
+			incrementExplosionRadius(explosionArray2); 
 		}
 
-		score = calculateScore(score, missileArray, cityArray);
+		score = calculateScore(score, missileArray, cityArray); // calculate score at the end of each level
 		drawScore(score, height, width);
 
-		if (lose(bombArray, missileArray, cityArray, nBombs))
+		if (lose(bombArray, missileArray, cityArray, nBombs)) // at the end of the level check if player has lost
 		{
+			// display text and score if player has lost
 			gfx_clear();
 			changeFontSize(100);
 			gfx_text(170, 300, "YOU LOSE!");
@@ -241,8 +244,9 @@ int main()
 			}
 		}
 
-		if (win(bombArray, missileArray, cityArray, nBombs) && currentLevel == 5)
+		if (win(bombArray, missileArray, cityArray, nBombs) && currentLevel == 5) // at the end of five levels, check if player has won the game
 		{
+			// display text and score if player wins the game
 			gfx_clear();
 			changeFontSize(100);
 			gfx_text(170, 300, "YOU WIN!");
@@ -254,6 +258,8 @@ int main()
 				break;
 			}
 		}
+
+		// at the end of the level, display text and score
 
 		gfx_clear();
 		gfx_text(400, 240, "Next Level?");
@@ -345,29 +351,31 @@ void setColor(int currentLevel, int structure)
 	}
 }
 
+// function that runs explsion if a bomb hits a missile or base
 void startExplosion2(Explosion explosionArray2[30], Bomb bombArray[30], City cityArray[6], Base baseArray[3], Missile missileArray[30], int nBombs)
 {
 	int i, j, n;
 
-	for (i=0; i<nBombs; i++)
+	for (i=0; i<nBombs; i++) // check every bomb in level
 	{
 		j=0;
 
-		n=bombArray[i].end;
+		n=bombArray[i].end; // checks end of bomb
 
 
-		if ((bombArray[i].status==alive) && (bombArray[i].y>bombArray[i].yend))
+		if ((bombArray[i].status==alive) && (bombArray[i].y>bombArray[i].yend)) // checks if bomb is in base
 		{
-			while (explosionArray2[j].status!=unused)
+			while (explosionArray2[j].status!=unused) // finds unused explosion in explosion2array
 			{
 				j++;
 			}
 
-			bombArray[i].status=dead;
-			explosionArray2[j].status=alive;
+			bombArray[i].status=dead; // sets bomb to dead
+			explosionArray2[j].status=alive; // sets explosion array to alive
 
-			explosionArray2[j].radius=0;
+			explosionArray2[j].radius=0; // initialize radius
 
+			// depending on hit, does different explosion
 			if ((n>=1) && (n<=3))
 			{
 				cityArray[n-1].status=dead;
@@ -853,18 +861,20 @@ void bombDestination(City cityArray[6], Base baseArray[3], Bomb bombArray[30])
 	}
 }
 
+// calculates numbe ro fbombs used for each level
 int numberOfBombs(int currentLevel)
 {
 	int i, nBombs=10;
 
 	for (i=1; i<currentLevel; i++)
 	{
-		nBombs+=2;
+		nBombs+=2; // each level increases numbe ro fbombs by two
 	}
 
 	return nBombs;
 }
 
+// function that checks if player has lost game
 int lose(Bomb bombArray[30], Missile missileArray[30], City cityArray[6], int bombs)
 {
 	int totalBombs, totalCities;
@@ -875,7 +885,7 @@ int lose(Bomb bombArray[30], Missile missileArray[30], City cityArray[6], int bo
 
 	if (totalCities == 0 && totalBombs == 0)
 	{
-		return 1;
+		return 1; // if all the bombs have run out and all the cities are dead, the player has lost
 	}
 	else
 	{
@@ -894,7 +904,7 @@ int win(Bomb bombArray[30], Missile missileArray[30], City cityArray[6], int bom
 
 	if ((nBombs==0) && (nCities>0)) 
 	{
-		return 1;
+		return 1; // if cities are greater than zero and there are no bombs left, player wins level
 	}
 
 	else 
@@ -903,6 +913,7 @@ int win(Bomb bombArray[30], Missile missileArray[30], City cityArray[6], int bom
 	}
 }
 
+// check numbe ro f missiles
 int checkNumberOfMissiles(Missile missileArray[30])
 {
 	int max = 30, i, totalAlive;
@@ -918,6 +929,7 @@ int checkNumberOfMissiles(Missile missileArray[30])
 	return totalAlive;
 }
 
+// checks number of alive cities at any given time
 int checkNumberOfCities(City cityArray[6])
 {
 	int max = 6, i, totalAlive;
@@ -948,6 +960,7 @@ int checkNumberOfBombs(Bomb bombArray[30], int bombs)
 	return nBombs;
 }
 
+// draws alive cities using location stored in struct
 void drawCities(City cityArray[6], int currentLevel)
 {
 	setColor(currentLevel, city);
@@ -965,7 +978,7 @@ void drawCities(City cityArray[6], int currentLevel)
 	}
 }
 
-
+// draws alive bases using position stored in struct
 void drawBases(Base baseArray[3], Missile missileArray[30], int currentLevel)
 {
 	int i, j, x, y, totalMissile = 0;
@@ -976,7 +989,7 @@ void drawBases(Base baseArray[3], Missile missileArray[30], int currentLevel)
 		x = baseArray[i].xleft;
 		y = baseArray[i].yleft;
 
-		for (j = 0; j < 30; j++)
+		for (j = 0; j < 30; j++) // check how many missiles are in base
 		{
 			if ((missileArray[j].baseNumber == i) && (missileArray[j].status == unused))
 			{
@@ -986,6 +999,7 @@ void drawBases(Base baseArray[3], Missile missileArray[30], int currentLevel)
 
 		setColor(currentLevel, base);
 		gfx_fill_rectangle(x,y,50,50);
+		// display missile number
 		gfx_color(255, 255, 255);
 		sprintf(missileTotal,"%d",totalMissile);
 		gfx_text(x + 20, y + 20, missileTotal);
@@ -994,12 +1008,14 @@ void drawBases(Base baseArray[3], Missile missileArray[30], int currentLevel)
 	}
 }
 
+// initialize missiles into the bases
 void initializeMissiles(Missile missileArray[30], Base baseArray[3])
 {
 	int i;
 
 	for (i = 0; i < 30; i++)
 	{
+		// put ten missiles in each base
 		if (i < 10)
 		{
 			missileArray[i].xstart = baseArray[0].xleft + 25;
@@ -1036,6 +1052,7 @@ void initializeMissiles(Missile missileArray[30], Base baseArray[3])
 	}
 }
 
+// draw missiles from starting base to current point
 void drawMissiles(Missile missileArray[30])
 {
 	int i;
@@ -1050,6 +1067,7 @@ void drawMissiles(Missile missileArray[30])
 	}
 }
 
+// draw bomb from starting point to current point
 void drawBombs(Bomb bombArray[30], int nBombs)
 {
 	int i;
@@ -1067,6 +1085,7 @@ void drawBombs(Bomb bombArray[30], int nBombs)
 
 }
 
+// move bomb by x and y
 void incrementBomb(Bomb bombArray[30], int nBombs)
 {
 	int i;
@@ -1089,6 +1108,7 @@ void incrementBomb(Bomb bombArray[30], int nBombs)
 	}
 }
 
+// move missile by deltax and deltay
 void incrementMissile(Missile missileArray[30])
 {
 	int i;
@@ -1113,6 +1133,7 @@ void incrementMissile(Missile missileArray[30])
 
 }
 
+// deploy bomb if counter is zero or decrement counter by 1
 void deployBomb(Bomb bombArray[30], int nBombs)
 {
 	int i;
@@ -1129,6 +1150,7 @@ void deployBomb(Bomb bombArray[30], int nBombs)
 	}
 }
 
+// display level on top of screen
 void drawLevel(int currentLevel, int height, int width)
 {
 	char level[2];
@@ -1142,7 +1164,7 @@ void drawLevel(int currentLevel, int height, int width)
 	gfx_text(200, 20, "LEVEL");
 }
 
-
+// display score on screen
 void drawScore(int score, int height, int width)
 {
 	char currentScore[10000];
@@ -1156,6 +1178,7 @@ void drawScore(int score, int height, int width)
 	gfx_text(500, 20, "SCORE");
 }
 
+// calculate score a the end of each level
 int calculateScore(int score, Missile missileArray[30], City cityArray[30])
 {
 	int i;
@@ -1164,7 +1187,7 @@ int calculateScore(int score, Missile missileArray[30], City cityArray[30])
 	{
 		if (cityArray[i].status == alive)
 		{
-			score += 100;
+			score += 100; // add 100 for each base left over
 		}
 	}
 	
@@ -1172,14 +1195,15 @@ int calculateScore(int score, Missile missileArray[30], City cityArray[30])
 	{
 		if (missileArray[i].status == alive)
 		{
-			score += 5;
+			score += 5; // add five for each missile left over
 		}
 	}
 
 	return score;
 
 }
-		
+
+// set each city to alive at the beginning of each game
 void aliveCities(City cityArray[6])
 {
 	int i;
@@ -1195,11 +1219,12 @@ void changeFontSize(int fontSize)
 	    /*
 	     *      * Displays text with given font size
 	     *          */
-	    char fontStr[50];
-	        sprintf(fontStr, "-*-helvetica-medium-r-normal-*-%i-120-*-*-*-*-iso8859-1", fontSize);
-		    change_font(fontStr);
+	char fontStr[50];
+	sprintf(fontStr, "-*-helvetica-medium-r-normal-*-%i-120-*-*-*-*-iso8859-1", fontSize);
+	change_font(fontStr);
 }
 
+// display "MISSILE COMMAND" on start screen
 void startScreen(int width, int height)
 {
 	char c;
@@ -1225,6 +1250,7 @@ void startScreen(int width, int height)
 	}
 }
 
+// display instruction on instruction screen
 void instructionScreen(void)
 {
 	char c;
