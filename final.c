@@ -76,33 +76,33 @@ enum STRUCTURE
 	city
 };
 
-int numberOfBombs(int currentLevel);//done
-int checkNumberOfBombs(Bomb bombArray[30], int bombs); //done
-int checkNumberOfMissiles(Missile missileArray[30]); //done
-int checkNumberOfCities(City cityArray[6]); //done
-int win(Bomb bombArray[30],Missile missileArray[30], City cityArray[6], int nBombs); //done
-int lose(Bomb bombArray[30], Missile missileArray[30], City cityArray[6], int nBombs); //done
-void initializeBomb(Bomb bombArray[30], City cityArray[6], Base baseArray[3],int currentLevel); //done
-void randomizeBomb(Bomb bombArray[30], City cityArray[6], Base baseArray[3], int nBombs); //done
-void bombDestination(City cityArray[6], Base baseArray[3], Bomb bombArray[30]); //done
-void bombSpeed(Bomb bombArray[30], int currentLevel); //done
-void initializeStructures(City cityArray[6], Base baseArray[3]); //done
-void initializeMissiles(Missile missileArray[30], Base baseArray[3]);//done
-void drawCities(City cityArray[6], int currentLevel); //done
-void drawBases(Base baseArray[3], Missile missileArray[30], int currentLevel);//done
-void drawMissiles(Missile missileArray[30]);//done
-void drawBombs(Bomb bombArray[30], int nBombs);//done
-int checkIfBombInsideExplosion(Bomb bombArray[30],Explosion explosionArray[30], int nBombs, int score); //done
-void startExplosion(Explosion explosionArray[30], Missile missileArray[30]); //done
-void initializeExplosion(Explosion explosionArray[29]); //done
-void drawExplosion(Explosion explosionArray[30]); //done
-void incrementExplosionRadius(Explosion explosionArray[30]); //done
-void incrementBomb(Bomb bombArray[30], int nBombs); //done
-void incrementMissile(Missile missileArray[30]); //done
+int numberOfBombs(int currentLevel);
+int checkNumberOfBombs(Bomb bombArray[30], int bombs);
+int checkNumberOfMissiles(Missile missileArray[30]);
+int checkNumberOfCities(City cityArray[6]);
+int win(Bomb bombArray[30],Missile missileArray[30], City cityArray[6], int nBombs);
+int lose(Bomb bombArray[30], Missile missileArray[30], City cityArray[6], int nBombs);
+void initializeBomb(Bomb bombArray[30], City cityArray[6], Base baseArray[3],int currentLevel);
+void randomizeBomb(Bomb bombArray[30], City cityArray[6], Base baseArray[3], int nBombs);
+void bombDestination(City cityArray[6], Base baseArray[3], Bomb bombArray[30]);
+void bombSpeed(Bomb bombArray[30], int currentLevel);
+void initializeStructures(City cityArray[6], Base baseArray[3]);
+void initializeMissiles(Missile missileArray[30], Base baseArray[3]);
+void drawCities(City cityArray[6], int currentLevel);
+void drawBases(Base baseArray[3], Missile missileArray[30], int currentLevel);
+void drawMissiles(Missile missileArray[30]);
+void drawBombs(Bomb bombArray[30], int nBombs);
+int checkIfBombInsideExplosion(Bomb bombArray[30],Explosion explosionArray[30], int nBombs, int score);
+void startExplosion(Explosion explosionArray[30], Missile missileArray[30]);
+void initializeExplosion(Explosion explosionArray[29]);
+void drawExplosion(Explosion explosionArray[30]);
+void incrementExplosionRadius(Explosion explosionArray[30]);
+void incrementBomb(Bomb bombArray[30], int nBombs);
+void incrementMissile(Missile missileArray[30]);
 void deployBomb(Bomb bombArray[30], int nBombs);
-void removeMissiles(int n, Missile missileArray[30]); //done
-void setOffMissile(Missile missileArray[30], char c, double x, double y); //done
-void missilePath(Missile *missile); //done
+void removeMissiles(int n, Missile missileArray[30]);
+void setOffMissile(Missile missileArray[30], char c, double x, double y);
+void missilePath(Missile *missile);
 void startMissileExplosion(double x, double y, Explosion explosionMissileArray[30]);
 void startExplosion2(Explosion explosionArray2[30], Bomb bombArray[30], City cityArray[6], Base baseArray[3], Missile missileArray[30], int nBombs);
 void drawLevel(int currentLevel, int height, int width);
